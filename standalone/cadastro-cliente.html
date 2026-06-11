@@ -1,0 +1,1211 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cortitex • Cadastro de Cliente (redesign)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --brand-50: #eef2ff;
+        --brand-100: #e0e7ff;
+        --brand-500: #6366f1;
+        --brand-600: #4f46e5;
+        --brand-700: #4338ca;
+        --bg: #f1f5f9;
+        --surface: #ffffff;
+        --surface-2: #f8fafc;
+        --text: #0f172a;
+        --text-muted: #64748b;
+        --border: #e2e8f0;
+        --ring: rgba(79, 70, 229, 0.25);
+        --success: #16a34a;
+        --success-bg: #dcfce7;
+        --danger: #dc2626;
+        --danger-bg: #fee2e2;
+        --warning: #d97706;
+        --warning-bg: #fef3c7;
+        --shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.06);
+        --shadow-lg: 0 10px 30px rgba(15, 23, 42, 0.12);
+        --radius: 12px;
+        --radius-sm: 8px;
+        --sidebar-w: 232px;
+      }
+      html[data-theme='dark'] {
+        --bg: #020617;
+        --surface: #0f172a;
+        --surface-2: #131c31;
+        --text: #e2e8f0;
+        --text-muted: #94a3b8;
+        --border: #1e293b;
+        --brand-50: rgba(99, 102, 241, 0.12);
+        --success-bg: rgba(22, 163, 74, 0.15);
+        --danger-bg: rgba(220, 38, 38, 0.15);
+        --warning-bg: rgba(217, 119, 6, 0.15);
+        --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+      }
+      a {
+        color: inherit;
+      }
+
+      .app {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* ===== Sidebar ===== */
+      .sidebar {
+        width: var(--sidebar-w);
+        flex-shrink: 0;
+        background: var(--surface);
+        border-right: 1px solid var(--border);
+        padding: 18px 12px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 8px 16px;
+      }
+      .brand-logo {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, var(--brand-600), var(--brand-700));
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-weight: 800;
+      }
+      .brand-name {
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+      .brand-sub {
+        font-size: 11px;
+        color: var(--text-muted);
+      }
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: var(--radius-sm);
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+      }
+      .nav-item:hover {
+        background: var(--surface-2);
+        color: var(--text);
+      }
+      .nav-item.active {
+        background: var(--brand-50);
+        color: var(--brand-600);
+        font-weight: 600;
+      }
+      .nav-item svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      /* ===== Main ===== */
+      .main {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .topbar {
+        height: 60px;
+        background: color-mix(in srgb, var(--surface) 85%, transparent);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0 20px;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+      }
+      .menu-btn {
+        display: none;
+        background: none;
+        border: none;
+        color: var(--text);
+        cursor: pointer;
+      }
+      .breadcrumb {
+        font-size: 13px;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .breadcrumb b {
+        color: var(--text);
+      }
+      .topbar-spacer {
+        flex: 1;
+      }
+      .icon-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text-muted);
+        display: grid;
+        place-items: center;
+        cursor: pointer;
+      }
+      .icon-btn:hover {
+        color: var(--text);
+        background: var(--surface-2);
+      }
+      .user {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--brand-500), var(--brand-700));
+        color: #fff;
+        display: grid;
+        place-items: center;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .user-info {
+        line-height: 1.15;
+      }
+      .user-info b {
+        font-size: 13px;
+      }
+      .user-info span {
+        font-size: 11px;
+        color: var(--text-muted);
+      }
+
+      .content {
+        padding: 24px;
+        max-width: 1080px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      /* ===== Page header ===== */
+      .page-head {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+      }
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 6px 8px;
+        border-radius: 8px;
+      }
+      .back-link:hover {
+        background: var(--surface-2);
+        color: var(--text);
+      }
+      .page-title {
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        margin: 0;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .badge-success {
+        background: var(--success-bg);
+        color: var(--success);
+      }
+      .badge-danger {
+        background: var(--danger-bg);
+        color: var(--danger);
+      }
+      .badge .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+
+      /* ===== Tabs ===== */
+      .tabs {
+        display: flex;
+        gap: 4px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 22px;
+        overflow-x: auto;
+        scrollbar-width: thin;
+      }
+      .tab {
+        border: none;
+        background: none;
+        padding: 12px 14px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-muted);
+        cursor: pointer;
+        white-space: nowrap;
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+      }
+      .tab:hover {
+        color: var(--text);
+      }
+      .tab.active {
+        color: var(--brand-600);
+        border-bottom-color: var(--brand-600);
+      }
+
+      /* ===== Card ===== */
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 20px;
+      }
+      .card-head {
+        padding: 18px 20px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .card-head h2 {
+        font-size: 15px;
+        font-weight: 700;
+        margin: 0;
+      }
+      .card-head .hint {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-left: auto;
+      }
+      .card-body {
+        padding: 20px;
+      }
+
+      /* ===== Form grid ===== */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 16px;
+      }
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .col-2 { grid-column: span 2; }
+      .col-3 { grid-column: span 3; }
+      .col-4 { grid-column: span 4; }
+      .col-5 { grid-column: span 5; }
+      .col-6 { grid-column: span 6; }
+      .col-7 { grid-column: span 7; }
+      .col-8 { grid-column: span 8; }
+      .col-9 { grid-column: span 9; }
+      .col-12 { grid-column: span 12; }
+
+      label {
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--text);
+      }
+      label .req {
+        color: var(--danger);
+        margin-left: 2px;
+      }
+      .control {
+        width: 100%;
+        height: 42px;
+        padding: 0 12px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        background: var(--surface);
+        color: var(--text);
+        font-size: 14px;
+        font-family: inherit;
+        transition: border-color 0.15s, box-shadow 0.15s;
+        outline: none;
+      }
+      textarea.control {
+        height: auto;
+        padding: 10px 12px;
+        resize: vertical;
+        min-height: 76px;
+      }
+      .control::placeholder {
+        color: var(--text-muted);
+        opacity: 0.7;
+      }
+      .control:focus {
+        border-color: var(--brand-500);
+        box-shadow: 0 0 0 3px var(--ring);
+      }
+      .control:disabled {
+        background: var(--surface-2);
+        color: var(--text-muted);
+        cursor: not-allowed;
+      }
+      select.control {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        padding-right: 36px;
+      }
+      .input-prefix {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .input-prefix span {
+        position: absolute;
+        left: 12px;
+        color: var(--text-muted);
+        font-size: 14px;
+        pointer-events: none;
+      }
+      .input-prefix .control {
+        padding-left: 38px;
+      }
+      .error-msg {
+        font-size: 12px;
+        color: var(--danger);
+        display: none;
+      }
+      .field.invalid .control {
+        border-color: var(--danger);
+      }
+      .field.invalid .error-msg {
+        display: block;
+      }
+
+      /* ===== Photo dropzone ===== */
+      .photo {
+        grid-column: span 3;
+      }
+      .dropzone {
+        border: 1.5px dashed var(--border);
+        border-radius: var(--radius);
+        aspect-ratio: 1;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        padding: 16px;
+        cursor: pointer;
+        background: var(--surface-2);
+        overflow: hidden;
+        position: relative;
+        transition: border-color 0.15s, background 0.15s;
+      }
+      .dropzone:hover {
+        border-color: var(--brand-500);
+        background: var(--brand-50);
+      }
+      .dropzone img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: none;
+      }
+      .dropzone.has-img img {
+        display: block;
+      }
+      .dropzone.has-img .dz-text {
+        display: none;
+      }
+      .dz-text {
+        color: var(--text-muted);
+        font-size: 12.5px;
+      }
+      .dz-icon {
+        width: 30px;
+        height: 30px;
+        margin: 0 auto 8px;
+        color: var(--brand-600);
+      }
+      .photo-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      /* ===== Toggle (Bloqueado) ===== */
+      .status-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+      }
+      .status-row .label {
+        font-size: 13.5px;
+        font-weight: 600;
+      }
+      .status-row .desc {
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+      .switch {
+        margin-left: auto;
+        position: relative;
+        width: 46px;
+        height: 26px;
+        flex-shrink: 0;
+      }
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .slider {
+        position: absolute;
+        inset: 0;
+        background: #cbd5e1;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      html[data-theme='dark'] .slider {
+        background: #334155;
+      }
+      .slider::before {
+        content: '';
+        position: absolute;
+        height: 20px;
+        width: 20px;
+        left: 3px;
+        top: 3px;
+        background: #fff;
+        border-radius: 50%;
+        transition: 0.2s;
+        box-shadow: var(--shadow);
+      }
+      .switch input:checked + .slider {
+        background: var(--danger);
+      }
+      .switch input:checked + .slider::before {
+        transform: translateX(20px);
+      }
+
+      /* ===== Checkbox ===== */
+      .check {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        cursor: pointer;
+        user-select: none;
+      }
+      .check input {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--brand-600);
+        cursor: pointer;
+      }
+
+      /* ===== Buttons / action bar ===== */
+      .actionbar {
+        position: sticky;
+        bottom: 0;
+        background: color-mix(in srgb, var(--surface) 88%, transparent);
+        backdrop-filter: blur(8px);
+        border-top: 1px solid var(--border);
+        padding: 14px 24px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        z-index: 15;
+      }
+      .dirty-hint {
+        font-size: 12.5px;
+        color: var(--warning);
+        display: none;
+        align-items: center;
+        gap: 6px;
+      }
+      .dirty .dirty-hint {
+        display: flex;
+      }
+      .btn {
+        height: 42px;
+        padding: 0 18px;
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        font-weight: 600;
+        font-family: inherit;
+        cursor: pointer;
+        border: 1px solid transparent;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: background 0.15s, opacity 0.15s;
+      }
+      .btn-primary {
+        background: var(--brand-600);
+        color: #fff;
+      }
+      .btn-primary:hover {
+        background: var(--brand-700);
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--text-muted);
+        border-color: var(--border);
+      }
+      .btn-ghost:hover {
+        background: var(--surface-2);
+        color: var(--text);
+      }
+
+      /* ===== Toast ===== */
+      .toast {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        background: var(--text);
+        color: var(--surface);
+        padding: 14px 18px;
+        border-radius: var(--radius-sm);
+        box-shadow: var(--shadow-lg);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        transform: translateY(160%);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s, visibility 0.3s;
+        z-index: 100;
+      }
+      .toast.show {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+      }
+      .toast svg {
+        color: #4ade80;
+      }
+
+      .tab-panel {
+        display: none;
+      }
+      .tab-panel.active {
+        display: block;
+        animation: fade 0.2s ease;
+      }
+      @keyframes fade {
+        from {
+          opacity: 0;
+          transform: translateY(4px);
+        }
+      }
+      .empty {
+        text-align: center;
+        padding: 48px 20px;
+        color: var(--text-muted);
+        font-size: 14px;
+      }
+
+      .scrim {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(2, 6, 23, 0.5);
+        z-index: 30;
+      }
+
+      /* ===== Responsivo ===== */
+      @media (max-width: 960px) {
+        .col-2, .col-3, .col-4, .col-5 { grid-column: span 6; }
+        .col-7, .col-8, .col-9 { grid-column: span 12; }
+        .photo { grid-column: span 12; max-width: 220px; }
+      }
+      @media (max-width: 720px) {
+        .sidebar {
+          position: fixed;
+          left: 0;
+          z-index: 40;
+          transform: translateX(-100%);
+          transition: transform 0.25s;
+        }
+        .sidebar.open {
+          transform: translateX(0);
+        }
+        .scrim.open {
+          display: block;
+        }
+        .menu-btn {
+          display: grid;
+          place-items: center;
+        }
+        .col-2, .col-3, .col-4, .col-5, .col-6 { grid-column: span 12; }
+        .user-info {
+          display: none;
+        }
+        .content {
+          padding: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <div class="brand">
+          <div class="brand-logo">C</div>
+          <div>
+            <div class="brand-name">Cortitex</div>
+            <div class="brand-sub">ERP &amp; Vendas</div>
+          </div>
+        </div>
+        <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Catálogo</a>
+        <a class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clientes</a>
+        <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Vendas</a>
+        <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>Estoque</a>
+        <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>Compras</a>
+        <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>Financeiro</a>
+        <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>Relatórios</a>
+      </aside>
+      <div class="scrim" id="scrim"></div>
+
+      <!-- Main -->
+      <div class="main">
+        <header class="topbar">
+          <button class="menu-btn icon-btn" id="menuBtn" aria-label="Menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
+          </button>
+          <div class="breadcrumb">Clientes <span>/</span> <b>Cortina Garcia</b></div>
+          <div class="topbar-spacer"></div>
+          <button class="icon-btn" id="themeBtn" aria-label="Alternar tema" title="Tema claro/escuro">
+            <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+          </button>
+          <div class="user">
+            <div class="avatar">PL</div>
+            <div class="user-info"><b>Paulo Lima</b><br /><span>Administrador</span></div>
+          </div>
+        </header>
+
+        <main class="content">
+          <div class="page-head">
+            <a class="back-link" href="#" onclick="return false">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+              Voltar
+            </a>
+            <h1 class="page-title">Cadastro de Cliente</h1>
+            <span class="badge badge-success" id="statusBadge"><span class="dot"></span>Ativo</span>
+          </div>
+
+          <!-- Tabs -->
+          <div class="tabs" role="tablist">
+            <button class="tab active" data-tab="dados">Dados do Cliente</button>
+            <button class="tab" data-tab="enderecos">Endereços</button>
+            <button class="tab" data-tab="fiscal">Fiscal / Tributação</button>
+            <button class="tab" data-tab="financeiro">Financeiro</button>
+            <button class="tab" data-tab="historico">Histórico de Pedidos</button>
+          </div>
+
+          <form id="form" novalidate>
+            <!-- ==== Painel: Dados ==== -->
+            <section class="tab-panel active" data-panel="dados">
+              <div class="card">
+                <div class="card-head">
+                  <h2>Dados do Cliente</h2>
+                  <span class="hint">Campos com <span style="color: var(--danger)">*</span> são obrigatórios</span>
+                </div>
+                <div class="card-body">
+                  <div class="grid">
+                    <!-- Foto -->
+                    <div class="photo">
+                      <label style="margin-bottom: 6px; display: block">Logo / Foto</label>
+                      <div class="dropzone" id="dropzone">
+                        <input type="file" id="photoInput" accept="image/*" hidden />
+                        <img id="photoPreview" alt="Pré-visualização" />
+                        <div class="dz-text">
+                          <svg class="dz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                          Arraste uma imagem<br />ou clique para selecionar
+                        </div>
+                      </div>
+                      <div class="photo-actions">
+                        <button type="button" class="btn btn-ghost" style="height: 34px; padding: 0 12px; font-size: 13px" onclick="document.getElementById('photoInput').click()">Selecionar</button>
+                        <button type="button" class="btn btn-ghost" style="height: 34px; padding: 0 12px; font-size: 13px" id="removePhoto">Remover</button>
+                      </div>
+                    </div>
+
+                    <!-- Campos -->
+                    <div class="col-9">
+                      <div class="grid">
+                        <div class="field col-3">
+                          <label for="doc">Tipo de documento</label>
+                          <select class="control" id="docType">
+                            <option value="cnpj">CNPJ</option>
+                            <option value="cpf">CPF</option>
+                          </select>
+                        </div>
+                        <div class="field col-3">
+                          <label for="doc"><span id="docLabel">CNPJ</span><span class="req">*</span></label>
+                          <input class="control" id="doc" inputmode="numeric" placeholder="00.000.000/0000-00" required />
+                          <span class="error-msg">Documento obrigatório.</span>
+                        </div>
+                        <div class="field col-6">
+                          <label for="razao">Razão Social / Nome<span class="req">*</span></label>
+                          <input class="control" id="razao" value="CORTINA GARCIA COMÉRCIO E DECORAÇÕES LTDA" required />
+                          <span class="error-msg">Informe a razão social.</span>
+                        </div>
+
+                        <div class="field col-3">
+                          <label for="ie">IE Destinatário</label>
+                          <select class="control" id="ie">
+                            <option>Contribuinte</option>
+                            <option selected>Não Contribuinte</option>
+                            <option>Isento</option>
+                          </select>
+                        </div>
+                        <div class="field col-3">
+                          <label for="insce">Inscrição Estadual</label>
+                          <input class="control" id="insce" value="321564" />
+                        </div>
+                        <div class="field col-3">
+                          <label for="inscm">Inscrição Municipal</label>
+                          <input class="control" id="inscm" value="654774" />
+                        </div>
+                        <div class="field col-3">
+                          <label for="cel">Celular</label>
+                          <input class="control" id="cel" inputmode="numeric" value="(21) 96405-4803" placeholder="(00) 00000-0000" />
+                        </div>
+
+                        <div class="field col-3">
+                          <label for="tel">Telefone</label>
+                          <input class="control" id="tel" inputmode="numeric" value="(21) 3640-5400" placeholder="(00) 0000-0000" />
+                        </div>
+                        <div class="field col-5">
+                          <label for="email">E-mail</label>
+                          <input class="control" id="email" type="email" value="luisgarcia@hotmail.com" placeholder="email@empresa.com" />
+                          <span class="error-msg">E-mail inválido.</span>
+                        </div>
+                        <div class="field col-4">
+                          <label for="insta">Instagram</label>
+                          <div class="input-prefix">
+                            <span>@</span>
+                            <input class="control" id="insta" placeholder="usuario" />
+                          </div>
+                        </div>
+
+                        <div class="field col-3">
+                          <label for="credito">Limite de Crédito</label>
+                          <div class="input-prefix">
+                            <span>R$</span>
+                            <input class="control" id="credito" inputmode="numeric" value="10.000,00" />
+                          </div>
+                        </div>
+                        <div class="field col-9">
+                          <label for="site">Site</label>
+                          <input class="control" id="site" placeholder="https://" />
+                        </div>
+
+                        <div class="field col-12">
+                          <label for="obs">Observação</label>
+                          <textarea class="control" id="obs" placeholder="Anotações internas sobre o cliente…"></textarea>
+                        </div>
+
+                        <div class="col-12">
+                          <div class="status-row">
+                            <div>
+                              <div class="label">Cliente bloqueado</div>
+                              <div class="desc">Impede novos pedidos e vendas para este cliente.</div>
+                            </div>
+                            <label class="switch">
+                              <input type="checkbox" id="bloqueado" />
+                              <span class="slider"></span>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- ==== Painel: Endereços ==== -->
+            <section class="tab-panel" data-panel="enderecos">
+              <div class="card">
+                <div class="card-head"><h2>Endereço de Faturamento</h2></div>
+                <div class="card-body">
+                  <div class="grid">
+                    <div class="field col-3">
+                      <label for="cep">CEP</label>
+                      <input class="control" id="cep" inputmode="numeric" value="20230-006" placeholder="00000-000" />
+                      <span class="error-msg" id="cepError">CEP não encontrado.</span>
+                    </div>
+                    <div class="field col-7">
+                      <label for="end">Endereço</label>
+                      <input class="control" id="end" value="R. do Senado" />
+                    </div>
+                    <div class="field col-2">
+                      <label for="num">Número</label>
+                      <input class="control" id="num" value="258" />
+                    </div>
+                    <div class="field col-4">
+                      <label for="comp">Complemento</label>
+                      <input class="control" id="comp" placeholder="Sala, andar…" />
+                    </div>
+                    <div class="field col-4">
+                      <label for="bairro">Bairro</label>
+                      <input class="control" id="bairro" value="CENTRO" />
+                    </div>
+                    <div class="field col-3">
+                      <label for="cidade">Cidade</label>
+                      <input class="control" id="cidade" value="Rio de Janeiro" />
+                    </div>
+                    <div class="field col-1">
+                      <label for="uf">UF</label>
+                      <input class="control" id="uf" value="RJ" maxlength="2" />
+                    </div>
+                    <div class="col-12">
+                      <label class="check">
+                        <input type="checkbox" id="entregaDif" />
+                        Endereço de entrega diferente do faturamento
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card" id="entregaCard" style="display: none">
+                <div class="card-head"><h2>Endereço de Entrega</h2></div>
+                <div class="card-body">
+                  <div class="grid">
+                    <div class="field col-3"><label>CEP</label><input class="control" inputmode="numeric" placeholder="00000-000" /></div>
+                    <div class="field col-7"><label>Endereço</label><input class="control" /></div>
+                    <div class="field col-2"><label>Número</label><input class="control" /></div>
+                    <div class="field col-4"><label>Complemento</label><input class="control" /></div>
+                    <div class="field col-4"><label>Bairro</label><input class="control" /></div>
+                    <div class="field col-3"><label>Cidade</label><input class="control" /></div>
+                    <div class="field col-1"><label>UF</label><input class="control" maxlength="2" /></div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- ==== Painéis simples (demonstrativos) ==== -->
+            <section class="tab-panel" data-panel="fiscal">
+              <div class="card"><div class="card-body"><div class="empty">Configurações fiscais e tributárias do cliente (regime, CFOP padrão, retenções…).</div></div></div>
+            </section>
+            <section class="tab-panel" data-panel="financeiro">
+              <div class="card"><div class="card-body"><div class="empty">Condições de pagamento, limite, faturas em aberto e situação financeira.</div></div></div>
+            </section>
+            <section class="tab-panel" data-panel="historico">
+              <div class="card"><div class="card-body"><div class="empty">Histórico de pedidos e compras do cliente.</div></div></div>
+            </section>
+
+            <!-- Action bar -->
+            <div class="actionbar">
+              <span class="dirty-hint">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+                Alterações não salvas
+              </span>
+              <div class="topbar-spacer"></div>
+              <button type="button" class="btn btn-ghost" id="cancelBtn">Cancelar</button>
+              <button type="submit" class="btn btn-primary" id="saveBtn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Salvar
+              </button>
+            </div>
+          </form>
+        </main>
+      </div>
+    </div>
+
+    <div class="toast" id="toast">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      <span id="toastMsg">Cliente salvo com sucesso!</span>
+    </div>
+
+    <script>
+      // ---------- Tema ----------
+      const themeBtn = document.getElementById('themeBtn');
+      const root = document.documentElement;
+      const stored = localStorage.getItem('cortitex-theme');
+      if (stored) root.setAttribute('data-theme', stored);
+      themeBtn.addEventListener('click', () => {
+        const dark = root.getAttribute('data-theme') === 'dark';
+        root.setAttribute('data-theme', dark ? 'light' : 'dark');
+        localStorage.setItem('cortitex-theme', dark ? 'light' : 'dark');
+      });
+
+      // ---------- Menu mobile ----------
+      const sidebar = document.getElementById('sidebar');
+      const scrim = document.getElementById('scrim');
+      document.getElementById('menuBtn').addEventListener('click', () => {
+        sidebar.classList.add('open');
+        scrim.classList.add('open');
+      });
+      scrim.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+        scrim.classList.remove('open');
+      });
+
+      // ---------- Tabs ----------
+      const tabs = document.querySelectorAll('.tab');
+      const panels = document.querySelectorAll('.tab-panel');
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          tabs.forEach((t) => t.classList.remove('active'));
+          panels.forEach((p) => p.classList.remove('active'));
+          tab.classList.add('active');
+          document.querySelector(`[data-panel="${tab.dataset.tab}"]`).classList.add('active');
+        });
+      });
+
+      // ---------- Estado "sujo" (alterações não salvas) ----------
+      const form = document.getElementById('form');
+      form.addEventListener('input', () => form.classList.add('dirty'));
+
+      // ---------- Máscaras ----------
+      const onlyDigits = (v) => v.replace(/\D/g, '');
+      function maskCNPJ(v) {
+        v = onlyDigits(v).slice(0, 14);
+        return v
+          .replace(/^(\d{2})(\d)/, '$1.$2')
+          .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+          .replace(/\.(\d{3})(\d)/, '.$1/$2')
+          .replace(/(\d{4})(\d)/, '$1-$2');
+      }
+      function maskCPF(v) {
+        v = onlyDigits(v).slice(0, 11);
+        return v
+          .replace(/(\d{3})(\d)/, '$1.$2')
+          .replace(/(\d{3})\.(\d{3})(\d)/, '$1.$2.$3')
+          .replace(/\.(\d{3})(\d)/, '.$1-$2');
+      }
+      function maskPhone(v) {
+        v = onlyDigits(v).slice(0, 11);
+        if (v.length > 10)
+          return v.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+        return v.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3').replace(/-$/, '');
+      }
+      function maskCEP(v) {
+        return onlyDigits(v).slice(0, 8).replace(/(\d{5})(\d)/, '$1-$2');
+      }
+      function maskMoney(v) {
+        v = onlyDigits(v);
+        if (!v) return '';
+        v = (parseInt(v, 10) / 100).toFixed(2);
+        return v.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      }
+
+      const docType = document.getElementById('docType');
+      const docInput = document.getElementById('doc');
+      const docLabel = document.getElementById('docLabel');
+      function applyDocMask() {
+        const isCpf = docType.value === 'cpf';
+        docLabel.textContent = isCpf ? 'CPF' : 'CNPJ';
+        docInput.placeholder = isCpf ? '000.000.000-00' : '00.000.000/0000-00';
+        docInput.value = isCpf ? maskCPF(docInput.value) : maskCNPJ(docInput.value);
+      }
+      docType.addEventListener('change', applyDocMask);
+      docInput.addEventListener('input', applyDocMask);
+
+      document.getElementById('cel').addEventListener('input', (e) => (e.target.value = maskPhone(e.target.value)));
+      document.getElementById('tel').addEventListener('input', (e) => (e.target.value = maskPhone(e.target.value)));
+      document.getElementById('credito').addEventListener('input', (e) => (e.target.value = maskMoney(e.target.value)));
+      const cep = document.getElementById('cep');
+      cep.addEventListener('input', (e) => (e.target.value = maskCEP(e.target.value)));
+
+      // ---------- ViaCEP (autopreenchimento) ----------
+      cep.addEventListener('blur', async () => {
+        const v = onlyDigits(cep.value);
+        const cepField = cep.closest('.field');
+        cepField.classList.remove('invalid');
+        if (v.length !== 8) return;
+        try {
+          const res = await fetch(`https://viacep.com.br/ws/${v}/json/`);
+          const data = await res.json();
+          if (data.erro) {
+            cepField.classList.add('invalid');
+            return;
+          }
+          if (data.logradouro) document.getElementById('end').value = data.logradouro;
+          if (data.bairro) document.getElementById('bairro').value = data.bairro;
+          if (data.localidade) document.getElementById('cidade').value = data.localidade;
+          if (data.uf) document.getElementById('uf').value = data.uf;
+          form.classList.add('dirty');
+          document.getElementById('num').focus();
+        } catch (_) {
+          /* offline: ignora silenciosamente */
+        }
+      });
+
+      // ---------- Foto ----------
+      const dropzone = document.getElementById('dropzone');
+      const photoInput = document.getElementById('photoInput');
+      const photoPreview = document.getElementById('photoPreview');
+      dropzone.addEventListener('click', () => photoInput.click());
+      function loadFile(file) {
+        if (!file || !file.type.startsWith('image/')) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          photoPreview.src = e.target.result;
+          dropzone.classList.add('has-img');
+          form.classList.add('dirty');
+        };
+        reader.readAsDataURL(file);
+      }
+      photoInput.addEventListener('change', (e) => loadFile(e.target.files[0]));
+      ['dragover', 'dragenter'].forEach((ev) =>
+        dropzone.addEventListener(ev, (e) => {
+          e.preventDefault();
+          dropzone.style.borderColor = 'var(--brand-500)';
+        }),
+      );
+      ['dragleave', 'drop'].forEach((ev) =>
+        dropzone.addEventListener(ev, (e) => {
+          e.preventDefault();
+          dropzone.style.borderColor = '';
+        }),
+      );
+      dropzone.addEventListener('drop', (e) => loadFile(e.dataTransfer.files[0]));
+      document.getElementById('removePhoto').addEventListener('click', () => {
+        photoPreview.src = '';
+        dropzone.classList.remove('has-img');
+        photoInput.value = '';
+      });
+
+      // ---------- Bloqueado -> badge ----------
+      const bloqueado = document.getElementById('bloqueado');
+      const statusBadge = document.getElementById('statusBadge');
+      bloqueado.addEventListener('change', () => {
+        if (bloqueado.checked) {
+          statusBadge.className = 'badge badge-danger';
+          statusBadge.innerHTML = '<span class="dot"></span>Bloqueado';
+        } else {
+          statusBadge.className = 'badge badge-success';
+          statusBadge.innerHTML = '<span class="dot"></span>Ativo';
+        }
+      });
+
+      // ---------- Entrega diferente ----------
+      document.getElementById('entregaDif').addEventListener('change', (e) => {
+        document.getElementById('entregaCard').style.display = e.target.checked ? '' : 'none';
+      });
+
+      // ---------- Validação + Salvar ----------
+      function validateField(field, ok) {
+        field.classList.toggle('invalid', !ok);
+        return ok;
+      }
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      function showToast(msg) {
+        toastMsg.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+      }
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let valid = true;
+        // documento
+        valid = validateField(docInput.closest('.field'), onlyDigits(docInput.value).length >= 11) && valid;
+        // razão social
+        const razao = document.getElementById('razao');
+        valid = validateField(razao.closest('.field'), razao.value.trim().length > 1) && valid;
+        // email
+        const email = document.getElementById('email');
+        const emailOk = !email.value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value);
+        valid = validateField(email.closest('.field'), emailOk) && valid;
+
+        if (!valid) {
+          // abre a aba de dados se houver erro lá
+          document.querySelector('.tab[data-tab="dados"]').click();
+          showToast('Verifique os campos destacados.');
+          toast.querySelector('svg').style.color = '#f87171';
+          return;
+        }
+        toast.querySelector('svg').style.color = '#4ade80';
+        const btn = document.getElementById('saveBtn');
+        const original = btn.innerHTML;
+        btn.innerHTML = 'Salvando…';
+        btn.disabled = true;
+        setTimeout(() => {
+          btn.innerHTML = original;
+          btn.disabled = false;
+          form.classList.remove('dirty');
+          showToast('Cliente salvo com sucesso!');
+        }, 900);
+      });
+
+      document.getElementById('cancelBtn').addEventListener('click', () => {
+        if (!form.classList.contains('dirty') || confirm('Descartar as alterações não salvas?')) {
+          form.classList.remove('dirty');
+          showToast('Alterações descartadas.');
+        }
+      });
+
+      // aviso ao sair com alterações
+      window.addEventListener('beforeunload', (e) => {
+        if (form.classList.contains('dirty')) {
+          e.preventDefault();
+          e.returnValue = '';
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -1,12 +1,17 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { viteSingleFile } from 'vite-plugin-singlefile';
 import path from 'node:path';
+
+// VITE_SINGLEFILE=true gera um único HTML autocontido (tudo inline),
+// que pode ser aberto direto no navegador (file://), sem servidor.
+const singleFile = process.env.VITE_SINGLEFILE === 'true';
 
 export default defineConfig({
   // Em produção (GitHub Pages) o app é servido a partir de um subcaminho.
   // Defina VITE_BASE (ex.: "/PAULO-LIMA/") no build do CI; padrão "/" no dev.
-  base: process.env.VITE_BASE || '/',
-  plugins: [react()],
+  base: singleFile ? './' : process.env.VITE_BASE || '/',
+  plugins: [react(), ...(singleFile ? [viteSingleFile()] : [])],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

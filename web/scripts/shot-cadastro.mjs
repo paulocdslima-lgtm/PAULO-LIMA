@@ -13,7 +13,7 @@ async function shoot({ width, height, theme, suffix, panel }) {
   if (theme) {
     await page.addInitScript((t) => localStorage.setItem('cortitex-theme', t), theme);
   }
-  await page.goto(FILE, { waitUntil: 'networkidle' });
+  await page.goto(FILE, { waitUntil: 'domcontentloaded', timeout: 15000 });
   if (panel) {
     await page.click(`.tab[data-tab="${panel}"]`);
     await page.waitForTimeout(300);
@@ -24,9 +24,8 @@ async function shoot({ width, height, theme, suffix, panel }) {
   await ctx.close();
 }
 
-await shoot({ width: 1280, height: 860, theme: 'light', suffix: 'desktop-light' });
-await shoot({ width: 1280, height: 860, theme: 'dark', suffix: 'desktop-dark' });
-await shoot({ width: 1280, height: 860, theme: 'light', suffix: 'enderecos', panel: 'enderecos' });
+await shoot({ width: 1280, height: 900, theme: 'light', suffix: 'desktop-light' });
+await shoot({ width: 1280, height: 900, theme: 'dark', suffix: 'desktop-dark' });
 await shoot({ width: 390, height: 844, theme: 'light', suffix: 'mobile-light' });
 
 await browser.close();

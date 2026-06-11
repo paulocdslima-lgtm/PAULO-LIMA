@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cortitex • Cadastro de Cliente (redesign)</title>
+    <title>Cortitex • Cadastro de Cliente</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
@@ -11,961 +11,590 @@
     />
     <style>
       :root {
-        --brand-50: #eef2ff;
-        --brand-100: #e0e7ff;
-        --brand-500: #6366f1;
-        --brand-600: #4f46e5;
-        --brand-700: #4338ca;
-        --bg: #f1f5f9;
+        --brand-50: #f5f3ff;
+        --brand-100: #ede9fe;
+        --brand-500: #8b5cf6;
+        --brand-600: #7c3aed;
+        --brand-700: #6d28d9;
+        --bg: #f8fafc;
         --surface: #ffffff;
         --surface-2: #f8fafc;
+        --rail: #ffffff;
         --text: #0f172a;
         --text-muted: #64748b;
-        --border: #e2e8f0;
-        --ring: rgba(79, 70, 229, 0.25);
+        --label: #94a3b8;
+        --border: #e7eaf0;
+        --ring: rgba(124, 58, 237, 0.18);
         --success: #16a34a;
         --success-bg: #dcfce7;
         --danger: #dc2626;
         --danger-bg: #fee2e2;
         --warning: #d97706;
-        --warning-bg: #fef3c7;
-        --shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.06);
-        --shadow-lg: 0 10px 30px rgba(15, 23, 42, 0.12);
+        --shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+        --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.14);
         --radius: 12px;
-        --radius-sm: 8px;
-        --sidebar-w: 232px;
+        --radius-sm: 9px;
       }
       html[data-theme='dark'] {
         --bg: #020617;
         --surface: #0f172a;
         --surface-2: #131c31;
+        --rail: #0b1220;
         --text: #e2e8f0;
         --text-muted: #94a3b8;
+        --label: #64748b;
         --border: #1e293b;
-        --brand-50: rgba(99, 102, 241, 0.12);
-        --success-bg: rgba(22, 163, 74, 0.15);
-        --danger-bg: rgba(220, 38, 38, 0.15);
-        --warning-bg: rgba(217, 119, 6, 0.15);
-        --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-        --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
+        --brand-50: rgba(124, 58, 237, 0.16);
+        --success-bg: rgba(22, 163, 74, 0.16);
+        --danger-bg: rgba(220, 38, 38, 0.16);
+        --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.55);
       }
-
-      * {
-        box-sizing: border-box;
-      }
+      * { box-sizing: border-box; }
       body {
         margin: 0;
         font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
         background: var(--bg);
         color: var(--text);
         -webkit-font-smoothing: antialiased;
+        font-size: 14px;
       }
-      a {
-        color: inherit;
-      }
+      .app { display: flex; min-height: 100vh; }
 
-      .app {
-        display: flex;
-        min-height: 100vh;
-      }
-
-      /* ===== Sidebar ===== */
-      .sidebar {
-        width: var(--sidebar-w);
+      /* ===== Sidebar (rail) ===== */
+      .rail {
+        width: 78px;
         flex-shrink: 0;
-        background: var(--surface);
+        background: var(--rail);
         border-right: 1px solid var(--border);
-        padding: 18px 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 14px 6px;
+        gap: 4px;
         position: sticky;
         top: 0;
         height: 100vh;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
       }
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 6px 8px 16px;
+      .rail-logo {
+        width: 42px; height: 42px; border-radius: 12px;
+        background: linear-gradient(135deg, var(--brand-500), var(--brand-700));
+        color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 15px;
+        margin-bottom: 10px;
       }
-      .brand-logo {
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
-        background: linear-gradient(135deg, var(--brand-600), var(--brand-700));
-        display: grid;
-        place-items: center;
-        color: #fff;
-        font-weight: 800;
+      .rail-item {
+        width: 100%; padding: 9px 4px; border-radius: 10px;
+        display: flex; flex-direction: column; align-items: center; gap: 4px;
+        color: var(--text-muted); cursor: pointer; text-decoration: none;
+        font-size: 10px; font-weight: 600; text-align: center;
       }
-      .brand-name {
-        font-weight: 800;
-        letter-spacing: -0.02em;
-      }
-      .brand-sub {
-        font-size: 11px;
-        color: var(--text-muted);
-      }
-      .nav-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 10px 12px;
-        border-radius: var(--radius-sm);
-        color: var(--text-muted);
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: 500;
-        cursor: pointer;
-      }
-      .nav-item:hover {
-        background: var(--surface-2);
-        color: var(--text);
-      }
-      .nav-item.active {
-        background: var(--brand-50);
-        color: var(--brand-600);
-        font-weight: 600;
-      }
-      .nav-item svg {
-        width: 18px;
-        height: 18px;
-      }
+      .rail-item svg { width: 20px; height: 20px; }
+      .rail-item:hover { background: var(--surface-2); color: var(--text); }
+      .rail-item.active { background: var(--brand-50); color: var(--brand-600); }
 
       /* ===== Main ===== */
-      .main {
-        flex: 1;
-        min-width: 0;
-        display: flex;
-        flex-direction: column;
-      }
-      .topbar {
-        height: 60px;
-        background: color-mix(in srgb, var(--surface) 85%, transparent);
-        backdrop-filter: blur(8px);
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 0 20px;
-        position: sticky;
-        top: 0;
-        z-index: 20;
-      }
-      .menu-btn {
-        display: none;
-        background: none;
-        border: none;
-        color: var(--text);
-        cursor: pointer;
-      }
-      .breadcrumb {
-        font-size: 13px;
-        color: var(--text-muted);
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-      .breadcrumb b {
-        color: var(--text);
-      }
-      .topbar-spacer {
-        flex: 1;
-      }
-      .icon-btn {
-        width: 38px;
-        height: 38px;
-        border-radius: 10px;
-        border: 1px solid var(--border);
+      .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+
+      .pagehead {
         background: var(--surface);
-        color: var(--text-muted);
-        display: grid;
-        place-items: center;
-        cursor: pointer;
+        border-bottom: 1px solid var(--border);
+        padding: 14px 24px;
+        display: flex; align-items: center; gap: 14px;
+        position: sticky; top: 0; z-index: 20;
       }
-      .icon-btn:hover {
-        color: var(--text);
-        background: var(--surface-2);
+      .menu-btn { display: none; background: none; border: none; color: var(--text); cursor: pointer; }
+      .pagehead .title-wrap { display: flex; align-items: center; gap: 10px; min-width: 0; }
+      .ph-icon {
+        width: 34px; height: 34px; border-radius: 9px; background: var(--brand-50);
+        color: var(--brand-600); display: grid; place-items: center; flex-shrink: 0;
       }
-      .user {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-      .avatar {
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--brand-500), var(--brand-700));
-        color: #fff;
-        display: grid;
-        place-items: center;
-        font-size: 13px;
-        font-weight: 700;
-      }
-      .user-info {
-        line-height: 1.15;
-      }
-      .user-info b {
-        font-size: 13px;
-      }
-      .user-info span {
-        font-size: 11px;
-        color: var(--text-muted);
-      }
+      .pagehead h1 { font-size: 17px; font-weight: 800; margin: 0; letter-spacing: -0.02em; }
+      .pagehead .crumb { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+      .pagehead .crumb b { color: var(--text); font-weight: 600; }
+      .spacer { flex: 1; }
 
-      .content {
-        padding: 24px;
-        max-width: 1080px;
-        width: 100%;
-        margin: 0 auto;
-      }
-
-      /* ===== Page header ===== */
-      .page-head {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        margin-bottom: 18px;
-        flex-wrap: wrap;
-      }
-      .back-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        color: var(--text-muted);
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: 500;
-        padding: 6px 8px;
-        border-radius: 8px;
-      }
-      .back-link:hover {
-        background: var(--surface-2);
-        color: var(--text);
-      }
-      .page-title {
-        font-size: 22px;
-        font-weight: 800;
-        letter-spacing: -0.02em;
-        margin: 0;
-      }
       .badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 10px;
-        border-radius: 999px;
-        font-size: 12px;
-        font-weight: 600;
+        display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px;
+        border-radius: 999px; font-size: 12px; font-weight: 700;
       }
-      .badge-success {
-        background: var(--success-bg);
-        color: var(--success);
+      .badge-success { background: var(--success-bg); color: var(--success); }
+      .badge-danger { background: var(--danger-bg); color: var(--danger); }
+      .badge .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+      .block-toggle { display: flex; align-items: center; gap: 9px; font-size: 13px; font-weight: 600; color: var(--text-muted); }
+
+      .switch { position: relative; width: 42px; height: 24px; flex-shrink: 0; }
+      .switch input { opacity: 0; width: 0; height: 0; }
+      .slider { position: absolute; inset: 0; background: #cbd5e1; border-radius: 999px; cursor: pointer; transition: 0.2s; }
+      html[data-theme='dark'] .slider { background: #334155; }
+      .slider::before { content: ''; position: absolute; height: 18px; width: 18px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: 0.2s; box-shadow: var(--shadow); }
+      .switch input:checked + .slider { background: var(--danger); }
+      .switch input:checked + .slider::before { transform: translateX(18px); }
+
+      .btn {
+        height: 38px; padding: 0 14px; border-radius: var(--radius-sm); font-size: 13.5px;
+        font-weight: 600; font-family: inherit; cursor: pointer; border: 1px solid transparent;
+        display: inline-flex; align-items: center; gap: 7px; transition: background 0.15s, opacity 0.15s;
       }
-      .badge-danger {
-        background: var(--danger-bg);
-        color: var(--danger);
-      }
-      .badge .dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: currentColor;
-      }
+      .btn svg { width: 16px; height: 16px; }
+      .btn-primary { background: var(--brand-600); color: #fff; }
+      .btn-primary:hover { background: var(--brand-700); }
+      .btn-ghost { background: var(--surface); color: var(--text-muted); border-color: var(--border); }
+      .btn-ghost:hover { background: var(--surface-2); color: var(--text); }
+      .btn-soft { background: var(--brand-50); color: var(--brand-600); }
+      .btn-soft:hover { filter: brightness(0.97); }
+      .icon-btn { width: 38px; height: 38px; padding: 0; justify-content: center; }
 
       /* ===== Tabs ===== */
       .tabs {
-        display: flex;
-        gap: 4px;
+        background: var(--surface);
         border-bottom: 1px solid var(--border);
-        margin-bottom: 22px;
-        overflow-x: auto;
-        scrollbar-width: thin;
+        display: flex; gap: 2px; padding: 0 12px;
+        overflow-x: auto; scrollbar-width: thin;
+        position: sticky; top: 63px; z-index: 18;
       }
       .tab {
-        border: none;
-        background: none;
-        padding: 12px 14px;
-        font-size: 14px;
-        font-weight: 600;
-        color: var(--text-muted);
-        cursor: pointer;
-        white-space: nowrap;
-        border-bottom: 2px solid transparent;
-        margin-bottom: -1px;
+        border: none; background: none; padding: 13px 12px; font-size: 13.5px; font-weight: 600;
+        color: var(--text-muted); cursor: pointer; white-space: nowrap;
+        border-bottom: 2px solid transparent; margin-bottom: -1px;
+        display: inline-flex; align-items: center; gap: 7px;
       }
-      .tab:hover {
-        color: var(--text);
-      }
-      .tab.active {
-        color: var(--brand-600);
-        border-bottom-color: var(--brand-600);
-      }
+      .tab svg { width: 15px; height: 15px; opacity: 0.85; }
+      .tab:hover { color: var(--text); }
+      .tab.active { color: var(--brand-600); border-bottom-color: var(--brand-600); }
 
-      /* ===== Card ===== */
-      .card {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        margin-bottom: 20px;
-      }
-      .card-head {
-        padding: 18px 20px;
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-      .card-head h2 {
-        font-size: 15px;
-        font-weight: 700;
-        margin: 0;
-      }
-      .card-head .hint {
-        font-size: 12px;
-        color: var(--text-muted);
-        margin-left: auto;
-      }
-      .card-body {
-        padding: 20px;
-      }
+      .content { padding: 22px 24px 0; max-width: 1180px; width: 100%; margin: 0 auto; }
 
-      /* ===== Form grid ===== */
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(12, 1fr);
-        gap: 16px;
+      .section-title {
+        display: flex; align-items: center; gap: 8px;
+        font-size: 14px; font-weight: 700; color: var(--text);
+        margin: 6px 0 16px;
       }
-      .field {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-      .col-2 { grid-column: span 2; }
-      .col-3 { grid-column: span 3; }
-      .col-4 { grid-column: span 4; }
-      .col-5 { grid-column: span 5; }
-      .col-6 { grid-column: span 6; }
-      .col-7 { grid-column: span 7; }
-      .col-8 { grid-column: span 8; }
-      .col-9 { grid-column: span 9; }
-      .col-12 { grid-column: span 12; }
+      .section-title svg { width: 17px; height: 17px; color: var(--brand-600); }
+      .section + .section { margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--border); }
 
-      label {
-        font-size: 12.5px;
-        font-weight: 600;
-        color: var(--text);
+      /* ===== Layout dados ===== */
+      .dados-layout { display: grid; grid-template-columns: 220px 1fr; gap: 26px; }
+
+      /* Foto */
+      .photo-box {
+        aspect-ratio: 1; border-radius: var(--radius); overflow: hidden; position: relative;
+        background: #0f172a; color: #cbd5e1; display: grid; place-items: center; text-align: center;
+        cursor: pointer; border: 1px solid var(--border);
       }
-      label .req {
-        color: var(--danger);
-        margin-left: 2px;
-      }
+      html[data-theme='dark'] .photo-box { background: #020617; }
+      .photo-box img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: none; }
+      .photo-box.has-img img { display: block; }
+      .photo-box.has-img .pb-text { display: none; }
+      .pb-text { font-size: 12px; padding: 16px; }
+      .pb-text svg { width: 30px; height: 30px; margin-bottom: 8px; opacity: 0.8; }
+      .photo-actions { display: flex; gap: 8px; margin-top: 10px; }
+      .photo-actions .btn { height: 32px; padding: 0 10px; font-size: 12.5px; flex: 1; justify-content: center; }
+
+      .quality { margin-top: 16px; }
+      .quality .top { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: var(--label); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+      .quality .pct { color: var(--success); }
+      .quality .bar { height: 7px; border-radius: 999px; background: var(--border); overflow: hidden; }
+      .quality .bar > div { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #22c55e, #16a34a); transition: width 0.3s; }
+
+      .mini-field { margin-top: 16px; }
+
+      /* Form grid */
+      .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 14px 16px; }
+      .field { display: flex; flex-direction: column; gap: 5px; }
+      .col-2 { grid-column: span 2; } .col-3 { grid-column: span 3; } .col-4 { grid-column: span 4; }
+      .col-5 { grid-column: span 5; } .col-6 { grid-column: span 6; } .col-7 { grid-column: span 7; }
+      .col-8 { grid-column: span 8; } .col-9 { grid-column: span 9; } .col-12 { grid-column: span 12; }
+
+      label { font-size: 11px; font-weight: 700; color: var(--label); text-transform: uppercase; letter-spacing: 0.03em; }
+      label .req { color: var(--danger); margin-left: 1px; }
+
       .control {
-        width: 100%;
-        height: 42px;
-        padding: 0 12px;
-        border: 1px solid var(--border);
-        border-radius: var(--radius-sm);
-        background: var(--surface);
-        color: var(--text);
-        font-size: 14px;
-        font-family: inherit;
+        width: 100%; height: 40px; padding: 0 12px; border: 1px solid var(--border);
+        border-radius: var(--radius-sm); background: var(--surface); color: var(--text);
+        font-size: 14px; font-family: inherit; outline: none;
         transition: border-color 0.15s, box-shadow 0.15s;
-        outline: none;
       }
-      textarea.control {
-        height: auto;
-        padding: 10px 12px;
-        resize: vertical;
-        min-height: 76px;
-      }
-      .control::placeholder {
-        color: var(--text-muted);
-        opacity: 0.7;
-      }
-      .control:focus {
-        border-color: var(--brand-500);
-        box-shadow: 0 0 0 3px var(--ring);
-      }
-      .control:disabled {
-        background: var(--surface-2);
-        color: var(--text-muted);
-        cursor: not-allowed;
-      }
+      textarea.control { height: auto; padding: 10px 12px; resize: vertical; min-height: 72px; }
+      .control::placeholder { color: var(--text-muted); opacity: 0.6; }
+      .control:focus { border-color: var(--brand-500); box-shadow: 0 0 0 3px var(--ring); }
       select.control {
-        appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 12px center;
-        padding-right: 36px;
+        appearance: none; padding-right: 34px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-position: right 11px center;
       }
-      .input-prefix {
-        position: relative;
-        display: flex;
-        align-items: center;
+      .with-icon { position: relative; display: flex; align-items: center; }
+      .with-icon > svg, .with-icon > .pfx {
+        position: absolute; left: 11px; color: var(--text-muted); width: 16px; height: 16px; pointer-events: none;
       }
-      .input-prefix span {
-        position: absolute;
-        left: 12px;
-        color: var(--text-muted);
-        font-size: 14px;
-        pointer-events: none;
-      }
-      .input-prefix .control {
-        padding-left: 38px;
-      }
-      .error-msg {
-        font-size: 12px;
-        color: var(--danger);
-        display: none;
-      }
-      .field.invalid .control {
-        border-color: var(--danger);
-      }
-      .field.invalid .error-msg {
-        display: block;
-      }
+      .with-icon .pfx { font-size: 13px; width: auto; }
+      .with-icon .control { padding-left: 34px; }
+      .error-msg { font-size: 11.5px; color: var(--danger); display: none; }
+      .field.invalid .control { border-color: var(--danger); }
+      .field.invalid .error-msg { display: block; }
 
-      /* ===== Photo dropzone ===== */
-      .photo {
-        grid-column: span 3;
-      }
-      .dropzone {
-        border: 1.5px dashed var(--border);
-        border-radius: var(--radius);
-        aspect-ratio: 1;
-        display: grid;
-        place-items: center;
-        text-align: center;
-        padding: 16px;
-        cursor: pointer;
-        background: var(--surface-2);
-        overflow: hidden;
-        position: relative;
-        transition: border-color 0.15s, background 0.15s;
-      }
-      .dropzone:hover {
-        border-color: var(--brand-500);
-        background: var(--brand-50);
-      }
-      .dropzone img {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: none;
-      }
-      .dropzone.has-img img {
-        display: block;
-      }
-      .dropzone.has-img .dz-text {
-        display: none;
-      }
-      .dz-text {
-        color: var(--text-muted);
-        font-size: 12.5px;
-      }
-      .dz-icon {
-        width: 30px;
-        height: 30px;
-        margin: 0 auto 8px;
-        color: var(--brand-600);
-      }
-      .photo-actions {
-        display: flex;
-        gap: 8px;
-        margin-top: 10px;
-      }
+      .check { display: flex; align-items: center; gap: 10px; font-size: 13.5px; cursor: pointer; user-select: none; color: var(--text); }
+      .check input { width: 17px; height: 17px; accent-color: var(--brand-600); cursor: pointer; }
 
-      /* ===== Toggle (Bloqueado) ===== */
-      .status-row {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 16px;
-        background: var(--surface-2);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-sm);
-      }
-      .status-row .label {
-        font-size: 13.5px;
-        font-weight: 600;
-      }
-      .status-row .desc {
-        font-size: 12px;
-        color: var(--text-muted);
-      }
-      .switch {
-        margin-left: auto;
-        position: relative;
-        width: 46px;
-        height: 26px;
-        flex-shrink: 0;
-      }
-      .switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-      }
-      .slider {
-        position: absolute;
-        inset: 0;
-        background: #cbd5e1;
-        border-radius: 999px;
-        cursor: pointer;
-        transition: 0.2s;
-      }
-      html[data-theme='dark'] .slider {
-        background: #334155;
-      }
-      .slider::before {
-        content: '';
-        position: absolute;
-        height: 20px;
-        width: 20px;
-        left: 3px;
-        top: 3px;
-        background: #fff;
-        border-radius: 50%;
-        transition: 0.2s;
-        box-shadow: var(--shadow);
-      }
-      .switch input:checked + .slider {
-        background: var(--danger);
-      }
-      .switch input:checked + .slider::before {
-        transform: translateX(20px);
-      }
-
-      /* ===== Checkbox ===== */
-      .check {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 14px;
-        cursor: pointer;
-        user-select: none;
-      }
-      .check input {
-        width: 18px;
-        height: 18px;
-        accent-color: var(--brand-600);
-        cursor: pointer;
-      }
-
-      /* ===== Buttons / action bar ===== */
+      /* Action bar */
       .actionbar {
-        position: sticky;
-        bottom: 0;
-        background: color-mix(in srgb, var(--surface) 88%, transparent);
-        backdrop-filter: blur(8px);
-        border-top: 1px solid var(--border);
-        padding: 14px 24px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        z-index: 15;
+        position: sticky; bottom: 0; margin-top: 24px;
+        background: color-mix(in srgb, var(--surface) 90%, transparent);
+        backdrop-filter: blur(8px); border-top: 1px solid var(--border);
+        padding: 13px 24px; display: flex; align-items: center; gap: 12px; z-index: 15;
+        margin-left: -24px; margin-right: -24px;
       }
-      .dirty-hint {
-        font-size: 12.5px;
-        color: var(--warning);
-        display: none;
-        align-items: center;
-        gap: 6px;
-      }
-      .dirty .dirty-hint {
-        display: flex;
-      }
-      .btn {
-        height: 42px;
-        padding: 0 18px;
-        border-radius: var(--radius-sm);
-        font-size: 14px;
-        font-weight: 600;
-        font-family: inherit;
-        cursor: pointer;
-        border: 1px solid transparent;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        transition: background 0.15s, opacity 0.15s;
-      }
-      .btn-primary {
-        background: var(--brand-600);
-        color: #fff;
-      }
-      .btn-primary:hover {
-        background: var(--brand-700);
-      }
-      .btn-ghost {
-        background: transparent;
-        color: var(--text-muted);
-        border-color: var(--border);
-      }
-      .btn-ghost:hover {
-        background: var(--surface-2);
-        color: var(--text);
-      }
+      .dirty-hint { font-size: 12.5px; color: var(--warning); display: none; align-items: center; gap: 6px; }
+      .dirty-hint svg { width: 15px; height: 15px; }
+      .dirty .dirty-hint { display: flex; }
 
-      /* ===== Toast ===== */
       .toast {
-        position: fixed;
-        right: 20px;
-        bottom: 20px;
-        background: var(--text);
-        color: var(--surface);
-        padding: 14px 18px;
-        border-radius: var(--radius-sm);
-        box-shadow: var(--shadow-lg);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 14px;
-        font-weight: 600;
-        transform: translateY(160%);
-        opacity: 0;
-        visibility: hidden;
-        pointer-events: none;
-        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s, visibility 0.3s;
-        z-index: 100;
+        position: fixed; right: 20px; bottom: 20px; background: var(--text); color: var(--surface);
+        padding: 13px 18px; border-radius: var(--radius-sm); box-shadow: var(--shadow-lg);
+        display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600;
+        transform: translateY(160%); opacity: 0; visibility: hidden; pointer-events: none;
+        transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s, visibility 0.3s; z-index: 100;
       }
-      .toast.show {
-        transform: translateY(0);
-        opacity: 1;
-        visibility: visible;
-      }
-      .toast svg {
-        color: #4ade80;
-      }
+      .toast.show { transform: translateY(0); opacity: 1; visibility: visible; }
+      .toast svg { width: 20px; height: 20px; color: #4ade80; }
 
-      .tab-panel {
-        display: none;
-      }
-      .tab-panel.active {
-        display: block;
-        animation: fade 0.2s ease;
-      }
-      @keyframes fade {
-        from {
-          opacity: 0;
-          transform: translateY(4px);
-        }
-      }
-      .empty {
-        text-align: center;
-        padding: 48px 20px;
-        color: var(--text-muted);
-        font-size: 14px;
-      }
+      .tab-panel { display: none; }
+      .tab-panel.active { display: block; animation: fade 0.2s ease; }
+      @keyframes fade { from { opacity: 0; transform: translateY(4px); } }
+      .empty { text-align: center; padding: 56px 20px; color: var(--text-muted); }
 
-      .scrim {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(2, 6, 23, 0.5);
-        z-index: 30;
-      }
+      .scrim { display: none; position: fixed; inset: 0; background: rgba(2, 6, 23, 0.5); z-index: 30; }
 
-      /* ===== Responsivo ===== */
-      @media (max-width: 960px) {
+      @media (max-width: 1024px) {
+        .dados-layout { grid-template-columns: 1fr; }
+        .photo-col { display: grid; grid-template-columns: 180px 1fr 1fr; gap: 16px; align-items: start; }
+        .photo-col .quality, .photo-col .mini-field { margin-top: 0; }
+      }
+      @media (max-width: 860px) {
         .col-2, .col-3, .col-4, .col-5 { grid-column: span 6; }
         .col-7, .col-8, .col-9 { grid-column: span 12; }
-        .photo { grid-column: span 12; max-width: 220px; }
       }
-      @media (max-width: 720px) {
-        .sidebar {
-          position: fixed;
-          left: 0;
-          z-index: 40;
-          transform: translateX(-100%);
-          transition: transform 0.25s;
-        }
-        .sidebar.open {
-          transform: translateX(0);
-        }
-        .scrim.open {
-          display: block;
-        }
-        .menu-btn {
-          display: grid;
-          place-items: center;
-        }
+      @media (max-width: 680px) {
+        .rail { position: fixed; left: 0; z-index: 40; transform: translateX(-100%); transition: transform 0.25s; }
+        .rail.open { transform: translateX(0); }
+        .scrim.open { display: block; }
+        .menu-btn { display: grid; place-items: center; }
+        .photo-col { grid-template-columns: 1fr; }
         .col-2, .col-3, .col-4, .col-5, .col-6 { grid-column: span 12; }
-        .user-info {
-          display: none;
-        }
-        .content {
-          padding: 16px;
-        }
+        .pagehead .crumb { display: none; }
+        .content { padding: 16px 16px 0; }
+        .block-toggle span { display: none; }
       }
     </style>
   </head>
   <body>
     <div class="app">
-      <!-- Sidebar -->
-      <aside class="sidebar" id="sidebar">
-        <div class="brand">
-          <div class="brand-logo">C</div>
-          <div>
-            <div class="brand-name">Cortitex</div>
-            <div class="brand-sub">ERP &amp; Vendas</div>
-          </div>
-        </div>
-        <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Catálogo</a>
-        <a class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Clientes</a>
-        <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Vendas</a>
-        <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>Estoque</a>
-        <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>Compras</a>
-        <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>Financeiro</a>
-        <a class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>Relatórios</a>
+      <!-- Rail / Sidebar -->
+      <aside class="rail" id="rail">
+        <div class="rail-logo">CX</div>
+        <a class="rail-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Catálogo</a>
+        <a class="rail-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>Vendas</a>
+        <a class="rail-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>Estoque</a>
+        <a class="rail-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>Compras</a>
+        <a class="rail-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>Financeiro</a>
+        <a class="rail-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>Relatórios</a>
+        <a class="rail-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Config</a>
       </aside>
       <div class="scrim" id="scrim"></div>
 
-      <!-- Main -->
       <div class="main">
-        <header class="topbar">
-          <button class="menu-btn icon-btn" id="menuBtn" aria-label="Menu">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
+        <!-- Page header -->
+        <header class="pagehead">
+          <button class="menu-btn icon-btn btn btn-ghost" id="menuBtn" aria-label="Menu" style="border:none;background:none">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
           </button>
-          <div class="breadcrumb">Clientes <span>/</span> <b>Cortina Garcia</b></div>
-          <div class="topbar-spacer"></div>
-          <button class="icon-btn" id="themeBtn" aria-label="Alternar tema" title="Tema claro/escuro">
-            <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-          </button>
-          <div class="user">
-            <div class="avatar">PL</div>
-            <div class="user-info"><b>Paulo Lima</b><br /><span>Administrador</span></div>
+          <div class="title-wrap">
+            <div class="ph-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div>
+              <h1>Cadastro de Cliente</h1>
+              <div class="crumb">Vendas <span>›</span> Clientes <span>›</span> <b>Cortina Garcia</b></div>
+            </div>
           </div>
+          <div class="spacer"></div>
+          <span class="badge badge-success" id="statusBadge"><span class="dot"></span>Ativo</span>
+          <label class="block-toggle">
+            <span>Bloqueado</span>
+            <span class="switch"><input type="checkbox" id="bloqueado" /><span class="slider"></span></span>
+          </label>
+          <button type="button" class="btn btn-ghost">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
+            Log
+          </button>
+          <button type="button" class="btn btn-ghost icon-btn" id="themeBtn" title="Tema claro/escuro" aria-label="Tema">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+          </button>
         </header>
 
+        <!-- Tabs -->
+        <nav class="tabs" role="tablist">
+          <button class="tab active" data-tab="dados"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Dados do Cliente</button>
+          <button class="tab" data-tab="generic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>Painel</button>
+          <button class="tab" data-tab="generic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Representante</button>
+          <button class="tab" data-tab="generic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>Dados Adicionais</button>
+          <button class="tab" data-tab="generic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>Indicação</button>
+          <button class="tab" data-tab="generic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Instalador</button>
+          <button class="tab" data-tab="fiscal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Tributação</button>
+          <button class="tab" data-tab="generic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6"/></svg>Configurações</button>
+          <button class="tab" data-tab="generic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>Arquitetos</button>
+          <button class="tab" data-tab="generic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>News</button>
+          <button class="tab" data-tab="generic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>Investimentos</button>
+          <button class="tab" data-tab="historico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>Hist. Pedidos</button>
+        </nav>
+
         <main class="content">
-          <div class="page-head">
-            <a class="back-link" href="#" onclick="return false">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-              Voltar
-            </a>
-            <h1 class="page-title">Cadastro de Cliente</h1>
-            <span class="badge badge-success" id="statusBadge"><span class="dot"></span>Ativo</span>
-          </div>
-
-          <!-- Tabs -->
-          <div class="tabs" role="tablist">
-            <button class="tab active" data-tab="dados">Dados do Cliente</button>
-            <button class="tab" data-tab="enderecos">Endereços</button>
-            <button class="tab" data-tab="fiscal">Fiscal / Tributação</button>
-            <button class="tab" data-tab="financeiro">Financeiro</button>
-            <button class="tab" data-tab="historico">Histórico de Pedidos</button>
-          </div>
-
           <form id="form" novalidate>
-            <!-- ==== Painel: Dados ==== -->
+            <!-- ===== Dados ===== -->
             <section class="tab-panel active" data-panel="dados">
-              <div class="card">
-                <div class="card-head">
-                  <h2>Dados do Cliente</h2>
-                  <span class="hint">Campos com <span style="color: var(--danger)">*</span> são obrigatórios</span>
+              <div class="section">
+                <div class="section-title">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  Dados do Cliente
                 </div>
-                <div class="card-body">
-                  <div class="grid">
-                    <!-- Foto -->
-                    <div class="photo">
-                      <label style="margin-bottom: 6px; display: block">Logo / Foto</label>
-                      <div class="dropzone" id="dropzone">
+                <div class="dados-layout">
+                  <!-- Coluna foto -->
+                  <div class="photo-col">
+                    <div>
+                      <div class="photo-box" id="dropzone">
                         <input type="file" id="photoInput" accept="image/*" hidden />
-                        <img id="photoPreview" alt="Pré-visualização" />
-                        <div class="dz-text">
-                          <svg class="dz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
-                          Arraste uma imagem<br />ou clique para selecionar
+                        <img id="photoPreview" alt="Foto" />
+                        <div class="pb-text">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+                          Clique para<br />adicionar foto
                         </div>
                       </div>
                       <div class="photo-actions">
-                        <button type="button" class="btn btn-ghost" style="height: 34px; padding: 0 12px; font-size: 13px" onclick="document.getElementById('photoInput').click()">Selecionar</button>
-                        <button type="button" class="btn btn-ghost" style="height: 34px; padding: 0 12px; font-size: 13px" id="removePhoto">Remover</button>
+                        <button type="button" class="btn btn-soft" onclick="document.getElementById('photoInput').click()">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+                          Foto
+                        </button>
+                        <button type="button" class="btn btn-ghost" id="removePhoto">Remover</button>
                       </div>
                     </div>
 
-                    <!-- Campos -->
-                    <div class="col-9">
-                      <div class="grid">
-                        <div class="field col-3">
-                          <label for="doc">Tipo de documento</label>
-                          <select class="control" id="docType">
-                            <option value="cnpj">CNPJ</option>
-                            <option value="cpf">CPF</option>
-                          </select>
-                        </div>
-                        <div class="field col-3">
-                          <label for="doc"><span id="docLabel">CNPJ</span><span class="req">*</span></label>
-                          <input class="control" id="doc" inputmode="numeric" placeholder="00.000.000/0000-00" required />
-                          <span class="error-msg">Documento obrigatório.</span>
-                        </div>
-                        <div class="field col-6">
-                          <label for="razao">Razão Social / Nome<span class="req">*</span></label>
-                          <input class="control" id="razao" value="CORTINA GARCIA COMÉRCIO E DECORAÇÕES LTDA" required />
-                          <span class="error-msg">Informe a razão social.</span>
-                        </div>
+                    <div class="quality">
+                      <div class="top"><span>Qualidade do cadastro</span><span class="pct" id="qualPct">85% completo</span></div>
+                      <div class="bar"><div id="qualBar" style="width: 85%"></div></div>
+                    </div>
 
-                        <div class="field col-3">
-                          <label for="ie">IE Destinatário</label>
-                          <select class="control" id="ie">
-                            <option>Contribuinte</option>
-                            <option selected>Não Contribuinte</option>
-                            <option>Isento</option>
-                          </select>
-                        </div>
-                        <div class="field col-3">
-                          <label for="insce">Inscrição Estadual</label>
-                          <input class="control" id="insce" value="321564" />
-                        </div>
-                        <div class="field col-3">
-                          <label for="inscm">Inscrição Municipal</label>
-                          <input class="control" id="inscm" value="654774" />
-                        </div>
-                        <div class="field col-3">
-                          <label for="cel">Celular</label>
-                          <input class="control" id="cel" inputmode="numeric" value="(21) 96405-4803" placeholder="(00) 00000-0000" />
-                        </div>
+                    <div class="mini-field field">
+                      <label>Tipo</label>
+                      <select class="control" id="docType">
+                        <option value="cnpj">Pessoa Jurídica</option>
+                        <option value="cpf">Pessoa Física</option>
+                      </select>
+                    </div>
+                    <div class="mini-field field">
+                      <label>Status</label>
+                      <select class="control" id="statusSel">
+                        <option>Ativo</option>
+                        <option>Inativo</option>
+                        <option>Prospect</option>
+                      </select>
+                    </div>
+                  </div>
 
-                        <div class="field col-3">
-                          <label for="tel">Telefone</label>
-                          <input class="control" id="tel" inputmode="numeric" value="(21) 3640-5400" placeholder="(00) 0000-0000" />
-                        </div>
-                        <div class="field col-5">
-                          <label for="email">E-mail</label>
-                          <input class="control" id="email" type="email" value="luisgarcia@hotmail.com" placeholder="email@empresa.com" />
-                          <span class="error-msg">E-mail inválido.</span>
-                        </div>
-                        <div class="field col-4">
-                          <label for="insta">Instagram</label>
-                          <div class="input-prefix">
-                            <span>@</span>
-                            <input class="control" id="insta" placeholder="usuario" />
-                          </div>
-                        </div>
+                  <!-- Coluna campos -->
+                  <div>
+                    <div class="grid">
+                      <div class="field col-8">
+                        <label>Razão Social / Nome Completo<span class="req">*</span></label>
+                        <input class="control q" id="razao" value="CORTINA GARCIA COMÉRCIO E DECORAÇÕES LTDA" required />
+                        <span class="error-msg">Informe a razão social.</span>
+                      </div>
+                      <div class="field col-4">
+                        <label>Nome Fantasia</label>
+                        <input class="control q" id="fantasia" value="Cortina Garcia" />
+                      </div>
 
-                        <div class="field col-3">
-                          <label for="credito">Limite de Crédito</label>
-                          <div class="input-prefix">
-                            <span>R$</span>
-                            <input class="control" id="credito" inputmode="numeric" value="10.000,00" />
-                          </div>
-                        </div>
-                        <div class="field col-9">
-                          <label for="site">Site</label>
-                          <input class="control" id="site" placeholder="https://" />
-                        </div>
+                      <div class="field col-4">
+                        <label id="docLabel">CNPJ<span class="req">*</span></label>
+                        <input class="control q" id="doc" inputmode="numeric" value="40.393.506/0001-22" placeholder="00.000.000/0000-00" required />
+                        <span class="error-msg">Documento obrigatório.</span>
+                      </div>
+                      <div class="field col-4">
+                        <label>Insc. Estadual</label>
+                        <input class="control" id="insce" value="321564" />
+                      </div>
+                      <div class="field col-4">
+                        <label>Insc. Municipal</label>
+                        <input class="control" id="inscm" value="654774" />
+                      </div>
 
-                        <div class="field col-12">
-                          <label for="obs">Observação</label>
-                          <textarea class="control" id="obs" placeholder="Anotações internas sobre o cliente…"></textarea>
+                      <div class="field col-3">
+                        <label>IE Destinatário</label>
+                        <select class="control" id="ie">
+                          <option>Contribuinte</option>
+                          <option selected>Não Contribuinte</option>
+                          <option>Isento</option>
+                        </select>
+                      </div>
+                      <div class="field col-3">
+                        <label>Celular<span class="req">*</span></label>
+                        <div class="with-icon">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></svg>
+                          <input class="control q" id="cel" inputmode="numeric" value="(21) 98405-4803" placeholder="(00) 00000-0000" required />
                         </div>
+                        <span class="error-msg">Informe o celular.</span>
+                      </div>
+                      <div class="field col-3">
+                        <label>Telefone</label>
+                        <div class="with-icon">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                          <input class="control" id="tel" inputmode="numeric" value="(21) 9640-5480" placeholder="(00) 0000-0000" />
+                        </div>
+                      </div>
+                      <div class="field col-3">
+                        <label>WhatsApp</label>
+                        <div class="with-icon">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                          <input class="control" id="zap" inputmode="numeric" value="(21) 98405-4803" placeholder="(00) 00000-0000" />
+                        </div>
+                      </div>
 
-                        <div class="col-12">
-                          <div class="status-row">
-                            <div>
-                              <div class="label">Cliente bloqueado</div>
-                              <div class="desc">Impede novos pedidos e vendas para este cliente.</div>
-                            </div>
-                            <label class="switch">
-                              <input type="checkbox" id="bloqueado" />
-                              <span class="slider"></span>
-                            </label>
-                          </div>
+                      <div class="field col-5">
+                        <label>E-mail Principal<span class="req">*</span></label>
+                        <div class="with-icon">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                          <input class="control q" id="email" type="email" value="luisgarciafilho@gmail.com" placeholder="email@empresa.com" required />
                         </div>
+                        <span class="error-msg">E-mail inválido.</span>
+                      </div>
+                      <div class="field col-4">
+                        <label>Instagram</label>
+                        <div class="with-icon">
+                          <span class="pfx">@</span>
+                          <input class="control" id="insta" placeholder="usuario" />
+                        </div>
+                      </div>
+                      <div class="field col-3">
+                        <label>Site</label>
+                        <div class="with-icon">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                          <input class="control" id="site" placeholder="www.site.com.br" />
+                        </div>
+                      </div>
+
+                      <div class="field col-4">
+                        <label>Limite de Crédito (R$)</label>
+                        <div class="with-icon">
+                          <span class="pfx">R$</span>
+                          <input class="control q" id="credito" inputmode="numeric" value="50.000,00" style="padding-left: 40px" />
+                        </div>
+                      </div>
+                      <div class="field col-4">
+                        <label>Categoria</label>
+                        <select class="control" id="categoria">
+                          <option>Revendedor</option>
+                          <option>Consumidor Final</option>
+                          <option>Distribuidor</option>
+                          <option>Arquiteto / Parceiro</option>
+                        </select>
+                      </div>
+                      <div class="field col-4">
+                        <label>Classificação</label>
+                        <select class="control" id="classif">
+                          <option>A – Premium</option>
+                          <option>B – Recorrente</option>
+                          <option>C – Eventual</option>
+                        </select>
+                      </div>
+
+                      <div class="field col-12">
+                        <label>Observação</label>
+                        <textarea class="control" id="obs" placeholder="Anotações internas sobre o cliente…">Cliente preferencial, compras concentradas no Q4. Prefere contato via WhatsApp.</textarea>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </section>
 
-            <!-- ==== Painel: Endereços ==== -->
-            <section class="tab-panel" data-panel="enderecos">
-              <div class="card">
-                <div class="card-head"><h2>Endereço de Faturamento</h2></div>
-                <div class="card-body">
-                  <div class="grid">
-                    <div class="field col-3">
-                      <label for="cep">CEP</label>
-                      <input class="control" id="cep" inputmode="numeric" value="20230-006" placeholder="00000-000" />
-                      <span class="error-msg" id="cepError">CEP não encontrado.</span>
+              <!-- Endereço de Faturamento -->
+              <div class="section">
+                <div class="section-title">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                  Endereço de Faturamento
+                </div>
+                <div class="grid">
+                  <div class="field col-3">
+                    <label>CEP<span class="req">*</span></label>
+                    <div class="with-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                      <input class="control q" id="cep" inputmode="numeric" value="20231-008" placeholder="00000-000" required />
                     </div>
-                    <div class="field col-7">
-                      <label for="end">Endereço</label>
-                      <input class="control" id="end" value="R. do Senado" />
-                    </div>
-                    <div class="field col-2">
-                      <label for="num">Número</label>
-                      <input class="control" id="num" value="258" />
-                    </div>
-                    <div class="field col-4">
-                      <label for="comp">Complemento</label>
-                      <input class="control" id="comp" placeholder="Sala, andar…" />
-                    </div>
-                    <div class="field col-4">
-                      <label for="bairro">Bairro</label>
-                      <input class="control" id="bairro" value="CENTRO" />
-                    </div>
-                    <div class="field col-3">
-                      <label for="cidade">Cidade</label>
-                      <input class="control" id="cidade" value="Rio de Janeiro" />
-                    </div>
-                    <div class="field col-1">
-                      <label for="uf">UF</label>
-                      <input class="control" id="uf" value="RJ" maxlength="2" />
-                    </div>
-                    <div class="col-12">
-                      <label class="check">
-                        <input type="checkbox" id="entregaDif" />
-                        Endereço de entrega diferente do faturamento
-                      </label>
-                    </div>
+                    <span class="error-msg" id="cepError">CEP não encontrado.</span>
+                  </div>
+                  <div class="field col-7">
+                    <label>Logradouro</label>
+                    <input class="control q" id="end" value="R. do Senado" />
+                  </div>
+                  <div class="field col-2">
+                    <label>Número</label>
+                    <input class="control" id="num" value="258" />
+                  </div>
+                  <div class="field col-4">
+                    <label>Complemento</label>
+                    <input class="control" id="comp" placeholder="Apto, Sala…" />
+                  </div>
+                  <div class="field col-4">
+                    <label>Bairro</label>
+                    <input class="control q" id="bairro" value="Centro" />
+                  </div>
+                  <div class="field col-3">
+                    <label>Cidade</label>
+                    <input class="control q" id="cidade" value="Rio de Janeiro" />
+                  </div>
+                  <div class="field col-1">
+                    <label>UF</label>
+                    <input class="control" id="uf" value="RJ" maxlength="2" />
+                  </div>
+                  <div class="col-12">
+                    <label class="check">
+                      <input type="checkbox" id="entregaDif" />
+                      Endereço de Entrega diferente do Faturamento
+                    </label>
                   </div>
                 </div>
               </div>
 
-              <div class="card" id="entregaCard" style="display: none">
-                <div class="card-head"><h2>Endereço de Entrega</h2></div>
-                <div class="card-body">
-                  <div class="grid">
-                    <div class="field col-3"><label>CEP</label><input class="control" inputmode="numeric" placeholder="00000-000" /></div>
-                    <div class="field col-7"><label>Endereço</label><input class="control" /></div>
-                    <div class="field col-2"><label>Número</label><input class="control" /></div>
-                    <div class="field col-4"><label>Complemento</label><input class="control" /></div>
-                    <div class="field col-4"><label>Bairro</label><input class="control" /></div>
-                    <div class="field col-3"><label>Cidade</label><input class="control" /></div>
-                    <div class="field col-1"><label>UF</label><input class="control" maxlength="2" /></div>
-                  </div>
+              <div class="section" id="entregaSection" style="display: none">
+                <div class="section-title">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 18H3c-.6 0-1-.4-1-1V7c0-.6.4-1 1-1h10c.6 0 1 .4 1 1v11"/><path d="M14 9h4l4 4v4c0 .6-.4 1-1 1h-2"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
+                  Endereço de Entrega
+                </div>
+                <div class="grid">
+                  <div class="field col-3"><label>CEP</label><input class="control" inputmode="numeric" placeholder="00000-000" /></div>
+                  <div class="field col-7"><label>Logradouro</label><input class="control" /></div>
+                  <div class="field col-2"><label>Número</label><input class="control" /></div>
+                  <div class="field col-4"><label>Complemento</label><input class="control" /></div>
+                  <div class="field col-4"><label>Bairro</label><input class="control" /></div>
+                  <div class="field col-3"><label>Cidade</label><input class="control" /></div>
+                  <div class="field col-1"><label>UF</label><input class="control" maxlength="2" /></div>
                 </div>
               </div>
             </section>
 
-            <!-- ==== Painéis simples (demonstrativos) ==== -->
-            <section class="tab-panel" data-panel="fiscal">
-              <div class="card"><div class="card-body"><div class="empty">Configurações fiscais e tributárias do cliente (regime, CFOP padrão, retenções…).</div></div></div>
-            </section>
-            <section class="tab-panel" data-panel="financeiro">
-              <div class="card"><div class="card-body"><div class="empty">Condições de pagamento, limite, faturas em aberto e situação financeira.</div></div></div>
-            </section>
-            <section class="tab-panel" data-panel="historico">
-              <div class="card"><div class="card-body"><div class="empty">Histórico de pedidos e compras do cliente.</div></div></div>
-            </section>
+            <section class="tab-panel" data-panel="fiscal"><div class="empty">Regime tributário, CFOP padrão, retenções e dados fiscais do cliente.</div></section>
+            <section class="tab-panel" data-panel="historico"><div class="empty">Histórico de pedidos e compras do cliente.</div></section>
+            <section class="tab-panel" data-panel="generic"><div class="empty">Conteúdo desta aba (demonstrativo).</div></section>
 
             <!-- Action bar -->
             <div class="actionbar">
               <span class="dirty-hint">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
                 Alterações não salvas
               </span>
-              <div class="topbar-spacer"></div>
+              <div class="spacer"></div>
               <button type="button" class="btn btn-ghost" id="cancelBtn">Cancelar</button>
               <button type="submit" class="btn btn-primary" id="saveBtn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                Salvar
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Salvar Cliente
               </button>
             </div>
           </form>
@@ -974,238 +603,151 @@
     </div>
 
     <div class="toast" id="toast">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
       <span id="toastMsg">Cliente salvo com sucesso!</span>
     </div>
 
     <script>
-      // ---------- Tema ----------
-      const themeBtn = document.getElementById('themeBtn');
       const root = document.documentElement;
       const stored = localStorage.getItem('cortitex-theme');
       if (stored) root.setAttribute('data-theme', stored);
-      themeBtn.addEventListener('click', () => {
+      document.getElementById('themeBtn').addEventListener('click', () => {
         const dark = root.getAttribute('data-theme') === 'dark';
         root.setAttribute('data-theme', dark ? 'light' : 'dark');
         localStorage.setItem('cortitex-theme', dark ? 'light' : 'dark');
       });
 
-      // ---------- Menu mobile ----------
-      const sidebar = document.getElementById('sidebar');
+      const rail = document.getElementById('rail');
       const scrim = document.getElementById('scrim');
-      document.getElementById('menuBtn').addEventListener('click', () => {
-        sidebar.classList.add('open');
-        scrim.classList.add('open');
-      });
-      scrim.addEventListener('click', () => {
-        sidebar.classList.remove('open');
-        scrim.classList.remove('open');
-      });
+      document.getElementById('menuBtn').addEventListener('click', () => { rail.classList.add('open'); scrim.classList.add('open'); });
+      scrim.addEventListener('click', () => { rail.classList.remove('open'); scrim.classList.remove('open'); });
 
-      // ---------- Tabs ----------
       const tabs = document.querySelectorAll('.tab');
       const panels = document.querySelectorAll('.tab-panel');
-      tabs.forEach((tab) => {
-        tab.addEventListener('click', () => {
-          tabs.forEach((t) => t.classList.remove('active'));
-          panels.forEach((p) => p.classList.remove('active'));
-          tab.classList.add('active');
-          document.querySelector(`[data-panel="${tab.dataset.tab}"]`).classList.add('active');
-        });
-      });
+      tabs.forEach((tab) => tab.addEventListener('click', () => {
+        tabs.forEach((t) => t.classList.remove('active'));
+        tab.classList.add('active');
+        panels.forEach((p) => p.classList.remove('active'));
+        document.querySelector(`[data-panel="${tab.dataset.tab}"]`).classList.add('active');
+      }));
 
-      // ---------- Estado "sujo" (alterações não salvas) ----------
       const form = document.getElementById('form');
-      form.addEventListener('input', () => form.classList.add('dirty'));
+      form.addEventListener('input', () => { form.classList.add('dirty'); updateQuality(); });
 
-      // ---------- Máscaras ----------
+      // Qualidade do cadastro
+      const qualBar = document.getElementById('qualBar');
+      const qualPct = document.getElementById('qualPct');
+      function updateQuality() {
+        const fields = document.querySelectorAll('.control.q');
+        let filled = 0;
+        fields.forEach((f) => { if (String(f.value).trim()) filled++; });
+        const pct = Math.round((filled / fields.length) * 100);
+        qualBar.style.width = pct + '%';
+        qualPct.textContent = pct + '% completo';
+      }
+
+      // Máscaras
       const onlyDigits = (v) => v.replace(/\D/g, '');
-      function maskCNPJ(v) {
-        v = onlyDigits(v).slice(0, 14);
-        return v
-          .replace(/^(\d{2})(\d)/, '$1.$2')
-          .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
-          .replace(/\.(\d{3})(\d)/, '.$1/$2')
-          .replace(/(\d{4})(\d)/, '$1-$2');
-      }
-      function maskCPF(v) {
-        v = onlyDigits(v).slice(0, 11);
-        return v
-          .replace(/(\d{3})(\d)/, '$1.$2')
-          .replace(/(\d{3})\.(\d{3})(\d)/, '$1.$2.$3')
-          .replace(/\.(\d{3})(\d)/, '.$1-$2');
-      }
-      function maskPhone(v) {
-        v = onlyDigits(v).slice(0, 11);
-        if (v.length > 10)
-          return v.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
-        return v.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3').replace(/-$/, '');
-      }
-      function maskCEP(v) {
-        return onlyDigits(v).slice(0, 8).replace(/(\d{5})(\d)/, '$1-$2');
-      }
-      function maskMoney(v) {
-        v = onlyDigits(v);
-        if (!v) return '';
-        v = (parseInt(v, 10) / 100).toFixed(2);
-        return v.replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-      }
+      const maskCNPJ = (v) => onlyDigits(v).slice(0, 14).replace(/^(\d{2})(\d)/, '$1.$2').replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3').replace(/\.(\d{3})(\d)/, '.$1/$2').replace(/(\d{4})(\d)/, '$1-$2');
+      const maskCPF = (v) => onlyDigits(v).slice(0, 11).replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})\.(\d{3})(\d)/, '$1.$2.$3').replace(/\.(\d{3})(\d)/, '.$1-$2');
+      function maskPhone(v) { v = onlyDigits(v).slice(0, 11); return v.length > 10 ? v.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3') : v.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3').replace(/-$/, ''); }
+      const maskCEP = (v) => onlyDigits(v).slice(0, 8).replace(/(\d{5})(\d)/, '$1-$2');
+      function maskMoney(v) { v = onlyDigits(v); if (!v) return ''; return (parseInt(v, 10) / 100).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
 
       const docType = document.getElementById('docType');
       const docInput = document.getElementById('doc');
       const docLabel = document.getElementById('docLabel');
-      function applyDocMask() {
-        const isCpf = docType.value === 'cpf';
-        docLabel.textContent = isCpf ? 'CPF' : 'CNPJ';
-        docInput.placeholder = isCpf ? '000.000.000-00' : '00.000.000/0000-00';
-        docInput.value = isCpf ? maskCPF(docInput.value) : maskCNPJ(docInput.value);
+      function applyDoc() {
+        const cpf = docType.value === 'cpf';
+        docLabel.innerHTML = (cpf ? 'CPF' : 'CNPJ') + '<span class="req">*</span>';
+        docInput.placeholder = cpf ? '000.000.000-00' : '00.000.000/0000-00';
+        docInput.value = cpf ? maskCPF(docInput.value) : maskCNPJ(docInput.value);
       }
-      docType.addEventListener('change', applyDocMask);
-      docInput.addEventListener('input', applyDocMask);
-
-      document.getElementById('cel').addEventListener('input', (e) => (e.target.value = maskPhone(e.target.value)));
-      document.getElementById('tel').addEventListener('input', (e) => (e.target.value = maskPhone(e.target.value)));
+      docType.addEventListener('change', applyDoc);
+      docInput.addEventListener('input', applyDoc);
+      ['cel', 'tel', 'zap'].forEach((id) => document.getElementById(id).addEventListener('input', (e) => (e.target.value = maskPhone(e.target.value))));
       document.getElementById('credito').addEventListener('input', (e) => (e.target.value = maskMoney(e.target.value)));
       const cep = document.getElementById('cep');
       cep.addEventListener('input', (e) => (e.target.value = maskCEP(e.target.value)));
 
-      // ---------- ViaCEP (autopreenchimento) ----------
       cep.addEventListener('blur', async () => {
         const v = onlyDigits(cep.value);
-        const cepField = cep.closest('.field');
-        cepField.classList.remove('invalid');
+        cep.closest('.field').classList.remove('invalid');
         if (v.length !== 8) return;
         try {
-          const res = await fetch(`https://viacep.com.br/ws/${v}/json/`);
-          const data = await res.json();
-          if (data.erro) {
-            cepField.classList.add('invalid');
-            return;
-          }
+          const data = await (await fetch(`https://viacep.com.br/ws/${v}/json/`)).json();
+          if (data.erro) { cep.closest('.field').classList.add('invalid'); return; }
           if (data.logradouro) document.getElementById('end').value = data.logradouro;
           if (data.bairro) document.getElementById('bairro').value = data.bairro;
           if (data.localidade) document.getElementById('cidade').value = data.localidade;
           if (data.uf) document.getElementById('uf').value = data.uf;
-          form.classList.add('dirty');
+          form.classList.add('dirty'); updateQuality();
           document.getElementById('num').focus();
-        } catch (_) {
-          /* offline: ignora silenciosamente */
-        }
+        } catch (_) {}
       });
 
-      // ---------- Foto ----------
+      // Foto
       const dropzone = document.getElementById('dropzone');
       const photoInput = document.getElementById('photoInput');
       const photoPreview = document.getElementById('photoPreview');
       dropzone.addEventListener('click', () => photoInput.click());
       function loadFile(file) {
         if (!file || !file.type.startsWith('image/')) return;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          photoPreview.src = e.target.result;
-          dropzone.classList.add('has-img');
-          form.classList.add('dirty');
-        };
-        reader.readAsDataURL(file);
+        const r = new FileReader();
+        r.onload = (e) => { photoPreview.src = e.target.result; dropzone.classList.add('has-img'); form.classList.add('dirty'); };
+        r.readAsDataURL(file);
       }
       photoInput.addEventListener('change', (e) => loadFile(e.target.files[0]));
-      ['dragover', 'dragenter'].forEach((ev) =>
-        dropzone.addEventListener(ev, (e) => {
-          e.preventDefault();
-          dropzone.style.borderColor = 'var(--brand-500)';
-        }),
-      );
-      ['dragleave', 'drop'].forEach((ev) =>
-        dropzone.addEventListener(ev, (e) => {
-          e.preventDefault();
-          dropzone.style.borderColor = '';
-        }),
-      );
+      ['dragover', 'dragenter'].forEach((ev) => dropzone.addEventListener(ev, (e) => { e.preventDefault(); dropzone.style.borderColor = 'var(--brand-500)'; }));
+      ['dragleave', 'drop'].forEach((ev) => dropzone.addEventListener(ev, (e) => { e.preventDefault(); dropzone.style.borderColor = ''; }));
       dropzone.addEventListener('drop', (e) => loadFile(e.dataTransfer.files[0]));
-      document.getElementById('removePhoto').addEventListener('click', () => {
-        photoPreview.src = '';
-        dropzone.classList.remove('has-img');
-        photoInput.value = '';
-      });
+      document.getElementById('removePhoto').addEventListener('click', (e) => { e.stopPropagation(); photoPreview.src = ''; dropzone.classList.remove('has-img'); photoInput.value = ''; });
 
-      // ---------- Bloqueado -> badge ----------
+      // Bloqueado / Status -> badge
       const bloqueado = document.getElementById('bloqueado');
+      const statusSel = document.getElementById('statusSel');
       const statusBadge = document.getElementById('statusBadge');
-      bloqueado.addEventListener('change', () => {
+      function refreshBadge() {
         if (bloqueado.checked) {
           statusBadge.className = 'badge badge-danger';
           statusBadge.innerHTML = '<span class="dot"></span>Bloqueado';
         } else {
           statusBadge.className = 'badge badge-success';
-          statusBadge.innerHTML = '<span class="dot"></span>Ativo';
+          statusBadge.innerHTML = '<span class="dot"></span>' + statusSel.value;
         }
-      });
-
-      // ---------- Entrega diferente ----------
-      document.getElementById('entregaDif').addEventListener('change', (e) => {
-        document.getElementById('entregaCard').style.display = e.target.checked ? '' : 'none';
-      });
-
-      // ---------- Validação + Salvar ----------
-      function validateField(field, ok) {
-        field.classList.toggle('invalid', !ok);
-        return ok;
       }
+      bloqueado.addEventListener('change', refreshBadge);
+      statusSel.addEventListener('change', refreshBadge);
+
+      document.getElementById('entregaDif').addEventListener('change', (e) => {
+        document.getElementById('entregaSection').style.display = e.target.checked ? '' : 'none';
+      });
+
+      // Validação + salvar
       const toast = document.getElementById('toast');
       const toastMsg = document.getElementById('toastMsg');
-      function showToast(msg) {
-        toastMsg.textContent = msg;
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 3000);
-      }
+      function showToast(msg, ok = true) { toastMsg.textContent = msg; toast.querySelector('svg').style.color = ok ? '#4ade80' : '#f87171'; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000); }
+      const setValid = (el, ok) => { el.closest('.field').classList.toggle('invalid', !ok); return ok; };
 
       form.addEventListener('submit', (e) => {
         e.preventDefault();
-        let valid = true;
-        // documento
-        valid = validateField(docInput.closest('.field'), onlyDigits(docInput.value).length >= 11) && valid;
-        // razão social
-        const razao = document.getElementById('razao');
-        valid = validateField(razao.closest('.field'), razao.value.trim().length > 1) && valid;
-        // email
+        let ok = true;
+        ok = setValid(docInput, onlyDigits(docInput.value).length >= 11) && ok;
+        ok = setValid(document.getElementById('razao'), document.getElementById('razao').value.trim().length > 1) && ok;
+        ok = setValid(document.getElementById('cel'), onlyDigits(document.getElementById('cel').value).length >= 10) && ok;
         const email = document.getElementById('email');
-        const emailOk = !email.value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value);
-        valid = validateField(email.closest('.field'), emailOk) && valid;
-
-        if (!valid) {
-          // abre a aba de dados se houver erro lá
-          document.querySelector('.tab[data-tab="dados"]').click();
-          showToast('Verifique os campos destacados.');
-          toast.querySelector('svg').style.color = '#f87171';
-          return;
-        }
-        toast.querySelector('svg').style.color = '#4ade80';
+        ok = setValid(email, !email.value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) && ok;
+        if (!ok) { document.querySelector('.tab[data-tab="dados"]').click(); showToast('Verifique os campos destacados.', false); return; }
         const btn = document.getElementById('saveBtn');
-        const original = btn.innerHTML;
-        btn.innerHTML = 'Salvando…';
-        btn.disabled = true;
-        setTimeout(() => {
-          btn.innerHTML = original;
-          btn.disabled = false;
-          form.classList.remove('dirty');
-          showToast('Cliente salvo com sucesso!');
-        }, 900);
+        const orig = btn.innerHTML; btn.innerHTML = 'Salvando…'; btn.disabled = true;
+        setTimeout(() => { btn.innerHTML = orig; btn.disabled = false; form.classList.remove('dirty'); showToast('Cliente salvo com sucesso!'); }, 900);
       });
-
       document.getElementById('cancelBtn').addEventListener('click', () => {
-        if (!form.classList.contains('dirty') || confirm('Descartar as alterações não salvas?')) {
-          form.classList.remove('dirty');
-          showToast('Alterações descartadas.');
-        }
+        if (!form.classList.contains('dirty') || confirm('Descartar as alterações não salvas?')) { form.classList.remove('dirty'); showToast('Alterações descartadas.'); }
       });
+      window.addEventListener('beforeunload', (e) => { if (form.classList.contains('dirty')) { e.preventDefault(); e.returnValue = ''; } });
 
-      // aviso ao sair com alterações
-      window.addEventListener('beforeunload', (e) => {
-        if (form.classList.contains('dirty')) {
-          e.preventDefault();
-          e.returnValue = '';
-        }
-      });
+      updateQuality();
     </script>
   </body>
 </html>

@@ -9,7 +9,7 @@ export function NotFoundPage() {
         A página que você procura não existe ou foi movida.
       </p>
       <Link to="/" className="btn-primary mt-6">
-        Voltar ao Dashboard
+        Voltar ao Portal
       </Link>
     </div>
   );

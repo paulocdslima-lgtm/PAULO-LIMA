@@ -37,7 +37,7 @@ function NavList({ onNavigate }: { onNavigate?: () => void }) {
         <NavLink
           key={item.to}
           to={item.to}
-          end={item.to === '/'}
+          end={item.to === '/' || item.to === '/crm'}
           onClick={onNavigate}
           className={({ isActive }) =>
             classNames('nav-link', isActive && 'nav-link-active')

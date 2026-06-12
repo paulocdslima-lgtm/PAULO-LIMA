@@ -9,6 +9,14 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    rollupOptions: {
+      input: {
+        portal: path.resolve(__dirname, 'index.html'),
+        crm: path.resolve(__dirname, 'crm.html'),
+      },
+    },
+  },
   server: {
     port: 5173,
     host: true,

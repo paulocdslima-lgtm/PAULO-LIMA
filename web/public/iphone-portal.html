@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#020617" />
+    <title>Nexus Ecosystem | Interface iPhone</title>
+    <style>
+      :root {
+        --bg: #020617;
+        --text: #ffffff;
+        --muted: #cbd5e1;
+        --glass: rgba(255, 255, 255, 0.12);
+        --border: rgba(255, 255, 255, 0.16);
+        --crm: linear-gradient(135deg, #4f46e5, #06b6d4);
+        --erp: linear-gradient(135deg, #2563eb, #6366f1);
+        --estoque: linear-gradient(135deg, #059669, #14b8a6);
+        --supply: linear-gradient(135deg, #0891b2, #0ea5e9);
+        --pcp: linear-gradient(135deg, #f59e0b, #f97316);
+        --pdp: linear-gradient(135deg, #c026d3, #a855f7);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        background:
+          radial-gradient(circle at 18% 12%, rgba(99, 102, 241, 0.38), transparent 26rem),
+          radial-gradient(circle at 82% 18%, rgba(6, 182, 212, 0.26), transparent 28rem),
+          linear-gradient(135deg, #050816 0%, #111827 54%, #020617 100%);
+        color: var(--text);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .shell {
+        display: grid;
+        width: min(1180px, calc(100% - 32px));
+        min-height: 100vh;
+        grid-template-columns: 0.9fr 1.1fr;
+        align-items: center;
+        gap: 52px;
+        margin: 0 auto;
+        padding: 48px 0;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 9px 13px;
+        background: var(--glass);
+        color: #cffafe;
+        font-size: 0.76rem;
+        font-weight: 900;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #34d399;
+        box-shadow: 0 0 0 8px rgba(52, 211, 153, 0.12);
+      }
+
+      h1 {
+        max-width: 720px;
+        margin: 24px 0 0;
+        font-size: clamp(3rem, 8vw, 6.2rem);
+        line-height: 0.92;
+        letter-spacing: -0.08em;
+      }
+
+      .lead {
+        max-width: 660px;
+        margin: 24px 0 0;
+        color: var(--muted);
+        font-size: 1.08rem;
+        line-height: 1.8;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 34px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        border-radius: 16px;
+        padding: 0 18px;
+        font-weight: 900;
+      }
+
+      .button-primary {
+        background: var(--crm);
+        box-shadow: 0 20px 50px rgba(6, 182, 212, 0.24);
+      }
+
+      .button-secondary {
+        border: 1px solid var(--border);
+        background: var(--glass);
+      }
+
+      .phone-wrap {
+        position: relative;
+        display: grid;
+        place-items: center;
+      }
+
+      .glow {
+        position: absolute;
+        inset: 0;
+        border-radius: 60px;
+        background: rgba(6, 182, 212, 0.22);
+        filter: blur(48px);
+      }
+
+      .phone {
+        position: relative;
+        width: min(430px, 100%);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 52px;
+        background: #0f172a;
+        padding: 12px;
+        box-shadow: 0 44px 120px rgba(0, 0, 0, 0.58);
+      }
+
+      .screen {
+        min-height: 760px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 42px;
+        padding: 20px;
+        background:
+          radial-gradient(circle at 20% 10%, rgba(255, 255, 255, 0.24), transparent 14rem),
+          linear-gradient(145deg, #172554 0%, #581c87 42%, #0f172a 100%);
+        overflow: hidden;
+      }
+
+      .island {
+        width: 132px;
+        height: 28px;
+        margin: 0 auto 18px;
+        border-radius: 999px;
+        background: rgba(2, 6, 23, 0.86);
+      }
+
+      .status {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.88rem;
+        font-weight: 900;
+      }
+
+      .widgets {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .widget {
+        border-radius: 26px;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.18);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+        backdrop-filter: blur(16px);
+      }
+
+      .widget span {
+        color: rgba(255, 255, 255, 0.74);
+        font-size: 0.78rem;
+        font-weight: 800;
+      }
+
+      .widget strong {
+        display: block;
+        margin-top: 6px;
+        font-size: 2rem;
+        line-height: 1;
+      }
+
+      .apps {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px 16px;
+        margin-top: 30px;
+      }
+
+      .app {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        font-size: 0.76rem;
+        font-weight: 800;
+      }
+
+      .icon {
+        position: relative;
+        display: grid;
+        width: 78px;
+        height: 78px;
+        place-items: center;
+        border-radius: 25px;
+        box-shadow: 0 18px 36px rgba(0, 0, 0, 0.28);
+        font-size: 1.05rem;
+        font-weight: 950;
+        transition: transform 180ms ease;
+      }
+
+      .app:hover .icon,
+      .dock a:hover {
+        transform: translateY(-4px) scale(1.04);
+      }
+
+      .badge {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        display: grid;
+        min-width: 24px;
+        height: 24px;
+        place-items: center;
+        border: 2px solid #fff;
+        border-radius: 999px;
+        background: #ef4444;
+        font-size: 0.74rem;
+      }
+
+      .app label {
+        max-width: 82px;
+        margin-top: 8px;
+        line-height: 1.25;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
+
+      .crm {
+        background: var(--crm);
+      }
+
+      .erp {
+        background: var(--erp);
+      }
+
+      .estoque {
+        background: var(--estoque);
+      }
+
+      .supply {
+        background: var(--supply);
+      }
+
+      .pcp {
+        background: var(--pcp);
+      }
+
+      .pdp {
+        background: var(--pdp);
+      }
+
+      .dock {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-top: 34px;
+        border-radius: 30px;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(18px);
+      }
+
+      .dock a {
+        display: grid;
+        height: 62px;
+        place-items: center;
+        border-radius: 20px;
+        font-weight: 950;
+        transition: transform 180ms ease;
+      }
+
+      @media (max-width: 960px) {
+        .shell {
+          grid-template-columns: 1fr;
+          padding: 32px 0;
+        }
+      }
+
+      @media (max-width: 520px) {
+        .screen {
+          min-height: 680px;
+          padding: 16px;
+        }
+
+        .icon {
+          width: 66px;
+          height: 66px;
+          border-radius: 21px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <section>
+        <p class="eyebrow"><span class="dot"></span> Interface tipo iPhone</p>
+        <h1>Todos os sistemas como aplicativos.</h1>
+        <p class="lead">
+          CRM, ERP, Estoque, Supply Chain, PCP e PDP em uma tela inicial estilo iPhone.
+          O CRM continua no centro do ecossistema e os outros apps ficam a um toque de distância.
+        </p>
+        <div class="actions">
+          <a class="button button-primary" href="/#/crm">Acessar CRM</a>
+          <a class="button button-secondary" href="/#/">Abrir portal integrado</a>
+        </div>
+      </section>
+
+      <section class="phone-wrap" aria-label="Interface de aplicativos estilo iPhone">
+        <div class="glow"></div>
+        <div class="phone">
+          <div class="screen">
+            <div class="island"></div>
+            <div class="status">
+              <span>09:41</span>
+              <span>5G</span>
+            </div>
+
+            <div class="widgets">
+              <article class="widget">
+                <span>Resumo CRM</span>
+                <strong>360</strong>
+                <span>visão do cliente</span>
+              </article>
+              <article class="widget">
+                <span>Operação</span>
+                <strong>98%</strong>
+                <span>SLA integrado</span>
+              </article>
+            </div>
+
+            <div class="apps">
+              <a class="app" href="/#/crm">
+                <span class="icon crm">CRM<span class="badge">3</span></span>
+                <label>CRM central</label>
+              </a>
+              <a class="app" href="/#/erp">
+                <span class="icon erp">ERP</span>
+                <label>ERP</label>
+              </a>
+              <a class="app" href="/#/estoque">
+                <span class="icon estoque">EST</span>
+                <label>Estoque</label>
+              </a>
+              <a class="app" href="/#/supply-chain">
+                <span class="icon supply">SCM</span>
+                <label>Supply Chain</label>
+              </a>
+              <a class="app" href="/#/pcp">
+                <span class="icon pcp">PCP</span>
+                <label>PCP</label>
+              </a>
+              <a class="app" href="/#/pdp">
+                <span class="icon pdp">PDP</span>
+                <label>PDP</label>
+              </a>
+            </div>
+
+            <nav class="dock" aria-label="Dock de aplicativos">
+              <a class="crm" href="/#/crm">CRM</a>
+              <a class="erp" href="/#/erp">ERP</a>
+              <a class="estoque" href="/#/estoque">EST</a>
+              <a class="supply" href="/#/supply-chain">SCM</a>
+            </nav>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
